@@ -1,0 +1,6 @@
+typeof "whatever" >>> returns "String"
+
+"composite values" >>> arrays & objects
+else "primitive values"
+
+
