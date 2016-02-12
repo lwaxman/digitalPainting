@@ -1,6 +1,11 @@
 typeof "whatever" >>> returns "String"
 
+----------------------------------------------------
+09.02.2016
+-
+
 "composite values" >>> arrays & objects
 else "primitive values"
 
+we make a robot take apples from a tree.
 
