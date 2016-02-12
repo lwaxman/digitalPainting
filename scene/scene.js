@@ -12,8 +12,11 @@ var setup = function(){
 	ctx.fill();
 	ctx.imageSmoothingEnabled = true;
 
+	var xPos = Math.random()*(canvas.width-canvas.width*0.6)+canvas.width*0.6;
+	var yPos = (Math.random()*canvas.height/2)+canvas.height/2 ;//Math.random()*(canvas.width-canvas.height)+canvas.height*0.6;
+
 	ctx.save();  
-	ctx.translate(Math.random()*canvas.width, (Math.random()*canvas.height/2)+canvas.height/2);
+	ctx.translate(xPos, yPos);
 	ctx.rotate((Math.random()*(-25-25)+25) * Math.PI/180);
 	plant.drawStem(200);
 	ctx.restore();
@@ -21,19 +24,22 @@ var setup = function(){
 
 var plant = {
 	stemColours: ["rgba(140, 100, 70, 1)", "rgba(231, 240, 228, 0.5)", "rgba(200, 240, 90, 0.5)"],
+	leafColours: ["rgba(0, 255, 132, 1)", "rgba(58, 255, 20, 0.5)", "rgba(0, 189, 141, 0.5)"],
 	stemCount: 0,
 	drawLeaf: function(x, y){
-		// ctx.beginShape();
 		var leafW = Math.random()*(8-5)+5;
 		var leafH = 10;
-		ctx.beginPath();
-		var leafGrd = ctx.createRadialGradient(x, y, 15, x+leafW, y+leafH, 0);
-		leafGrd.addColorStop(0, '#29FF99');   
-		leafGrd.addColorStop(1, '#239249'); 
-		ctx.ellipse(x, y, leafW, 10, Math.random()*(-45-45)+45, 0, 2*Math.PI);
-		ctx.fillStyle = leafGrd;
-		ctx.fill();
-		ctx.closePath();
+		for(var i=0; i<this.leafColours.length; i++){
+			console.log(i);
+			ctx.beginPath();
+			var leafGrd = ctx.createRadialGradient(x, y, 15, x+leafW, y+leafH, 0);
+			leafGrd.addColorStop(0, this.leafColours[i]);   
+			leafGrd.addColorStop(1, "rgba("+ (Math.round(Math.random()*255)) +", "+ (Math.round(Math.random()*255)) +", 0, 0.5)"); 
+			ctx.ellipse(x, y, leafW, 10, Math.random()*(-45-45)+45, 0, 2*Math.PI);
+			ctx.fillStyle = leafGrd;
+			ctx.fill();
+			ctx.closePath();
+		}
 	},
 	drawFruit: function(x, y){
 		ctx.beginPath();
@@ -60,7 +66,7 @@ var plant = {
 		
 		for(var i=0; i<this.stemColours.length; i++){	
 			ctx.globalCompositeOperation = 'color';		
-			ctx.strokeStyle = this.stemColours[i]; //"#ACFF59"; 
+			ctx.strokeStyle = this.stemColours[i];
 			ctx.lineCap = 'round';
 			ctx.lineWidth = (length/10) * 0.8;
 			ctx.beginPath();
