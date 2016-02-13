@@ -2,12 +2,106 @@
 <html>
     <head>
         <meta charset="utf-8">
-        <title>trees</title>
+        <title>digital painting</title>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.4.22/p5.js"></script>
         <style>
+    		*{
+    			margin: 0;
+    			font-family: 'monaco', monospace;
+    		}
+    		canvas{
+				position: absolute;	
+    		}
+    		section#content{
+    			position: absolute;
+    			color: white;
+    			z-index: 1;
+				top: 200px;
+				left: 200px;
+				text-shadow: #000000 0 0 20px; 
+    		}
+    		a, a:visited{
+    			color: white;
+    			text-decoration: none;
+    		}
+    		a:hover{
+    			font-style: italic;
+    			color: #C2FFF9;
+    		}
+    		p{
+    			margin: 5px 0;
+    		}
+    		#instruction{
+    			color: #C9FC2D;
+    		}
         </style>
     </head>
     <body>
-    	<h1>Digital Painting</h1>
-		<a href="scene/index.html">scene assignment/botany</a>
+		<section id="content">
+			<p id="instruction">(scribble anywhere)</p>
+			<p><a href="scene/index.html">scene assignment/botany</a></p>
+		</section>
+		<script>
+			var colours = [];
+			var xPositions = [];
+			var yPositions = [];
+			var range = 50;
+			var count = 100;
+			var mouseOn = false;
+			var lineWeight = 3;
+
+			function setup(){
+				createCanvas(windowWidth, windowHeight);
+				background(0);
+				
+				for(var i=0; i<count; i++){
+					// colours[i] = color(random(230),random(230),random(230));
+					colours[i] = colours[i] = '#'+Math.floor(Math.random()*16777215).toString(16);
+					xPositions[i] = random(-range,range);
+					yPositions[i] = random(-range,range);
+				}
+			}
+
+			function newRange(){
+				for(var i=0; i<count; i++){
+					xPositions[i] = random(-range,range);
+					yPositions[i] = random(-range,range);
+				}
+			}
+
+			function newColours(){
+				for(var i=0; i<count; i++){
+					// colours[i] = color(random(255),random(255),random(255));
+					colours[i] = '#'+Math.floor(Math.random()*16777215).toString(16);
+				}
+			}
+
+			function draw(){
+				if(mouseOn){
+					drawCircles(mouseX, pmouseX, mouseY, pmouseY);
+				}
+			}
+
+			function windowResized() {
+				resizeCanvas(windowWidth, windowHeight);
+				background(0);
+			}
+
+			function mousePressed(){
+				mouseOn = true;
+			}
+
+			function mouseReleased(){
+				mouseOn = false;
+			}
+
+			function drawCircles(x, px, y, py){
+				for(var p=0; p<count; p++){
+					strokeWeight(lineWeight);
+					stroke(colours[p]);
+					line(x+xPositions[p], y+yPositions[p], px+xPositions[p], py+yPositions[p]);
+				}
+			}
+		</script>
     </body>
 </html>
