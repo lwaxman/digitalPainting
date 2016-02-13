@@ -32,7 +32,7 @@ var plant = {
 		ctx.save();
 		ctx.strokeStyle = "#477705";
 		ctx.lineCap = 'round';
-		ctx.lineWidth =  5;
+		ctx.lineWidth =  5;	
 		ctx.beginPath();
 		ctx.moveTo(x, y+stemLength);
 		ctx.rotate(angle * Math.PI/180);
@@ -40,29 +40,21 @@ var plant = {
 		ctx.stroke();
 		ctx.closePath();
 
-		ctx.save();
-		ctx.beginPath();
-		ctx.moveTo(x, y);
-		ctx.quadraticCurveTo(x+80, y-50, x, y-200);
-		ctx.quadraticCurveTo(x-80, y-50, x, y);
-		ctx.fillStyle = "#5C8623";
-		ctx.globalAlpha=0.8;
-		ctx.fill();
-		ctx.restore();
-		ctx.globalAlpha=1;
-		ctx.closePath();
-
-		ctx.save();
-		ctx.beginPath();
-		ctx.moveTo(x, y);
-		ctx.quadraticCurveTo(x+70, y-80, x+10, y-150);
-		ctx.quadraticCurveTo(x-70, y-80, x, y);
-		ctx.fillStyle = "#7DAA2E";
-		ctx.globalAlpha=0.8;
-		ctx.fill();
-		ctx.restore();
-		ctx.globalAlpha=1;
-		ctx.closePath();
+		for(var j=0; j<3; j++){
+			var xOffset = 50; //Math.random()*(80-30)+30;
+			var yOffset = 100; //Math.random()*(j*100-160)+160;
+			ctx.save(); 
+			ctx.beginPath();
+			ctx.moveTo(x, y);
+			ctx.quadraticCurveTo(x+xOffset, y-50, x, y-yOffset);
+			ctx.quadraticCurveTo(x-xOffset, y-50, x, y);
+			ctx.fillStyle = "#A9C704";
+			ctx.globalAlpha = 0.5;
+			ctx.fill();
+			ctx.globalAlpha = 1;
+			ctx.restore();
+			ctx.closePath();
+		}
 		ctx.restore();
 	},
 	drawStem: function(length){	
