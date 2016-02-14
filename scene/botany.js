@@ -6,8 +6,8 @@ canvas.height = window.innerHeight;
 var setup = function(){
 	ctx.rect(0, 0, canvas.width, canvas.height);
 	var grd = ctx.createLinearGradient(0, 0, 0, canvas.height);
-	grd.addColorStop(0, '#FBFFE3');   
-	grd.addColorStop(1, '#C7BD8F'); 
+	grd.addColorStop(0, '#FFF');//'#FBFFE3');   
+	grd.addColorStop(1, '#DDD');//'#C7BD8F'); 
 	ctx.fillStyle = grd;
 	ctx.fill();
 	ctx.imageSmoothingEnabled = true;
@@ -23,6 +23,29 @@ var setup = function(){
 }; 
 
 var plant = {
+	drawPetal: function(x, y){
+		var angle = Math.random()*50;
+		var yOffset = Math.random()*(100-70)+70;
+
+		ctx.save(); 
+		ctx.rotate( (-angle*2) * Math.PI/180);
+		// ctx.restore();
+		for(var c=0; c<5; c++){
+			var xOffset = Math.random()*(50-30)+30;
+			ctx.save(); 
+			ctx.rotate((angle*c) * Math.PI/180);
+			ctx.beginPath();
+			ctx.moveTo(x, y);
+			ctx.quadraticCurveTo(x+xOffset, y-50, x, y-yOffset);
+			ctx.quadraticCurveTo(x-xOffset, y-50, x, y);
+			ctx.fillStyle = "#E695C7";
+			ctx.globalAlpha = 0.8;
+			ctx.fill();
+			ctx.restore();
+			ctx.closePath();	
+		}
+		ctx.restore();
+	},
 	drawLeaf: function(x, y){
 		var leafW = Math.random()*(8-5)+5;
 		var leafH = 10;
@@ -34,24 +57,23 @@ var plant = {
 		ctx.lineCap = 'round';
 		ctx.lineWidth =  5;	
 		ctx.beginPath();
-		ctx.moveTo(x, y+stemLength);
+		ctx.moveTo(x, y);
 		ctx.rotate(angle * Math.PI/180);
-		ctx.quadraticCurveTo(x-20, y+30, x, y);
+		ctx.quadraticCurveTo(x-30, y+30, x-50, y-50);
 		ctx.stroke();
 		ctx.closePath();
 
-		for(var j=0; j<3; j++){
-			var xOffset = 50; //Math.random()*(80-30)+30;
-			var yOffset = 100; //Math.random()*(j*100-160)+160;
+		for(var j=1; j<4; j++){
+			var xOffset = Math.random()*(j*30-j*20)+j*20;
+			var leafHeight = Math.random()*(j*60-j*40)+j*40;
 			ctx.save(); 
 			ctx.beginPath();
-			ctx.moveTo(x, y);
-			ctx.quadraticCurveTo(x+xOffset, y-50, x, y-yOffset);
-			ctx.quadraticCurveTo(x-xOffset, y-50, x, y);
+			ctx.moveTo(x-50, y-50);
+			ctx.quadraticCurveTo(x+xOffset-50, y-50, x-50, y-leafHeight-50);
+			ctx.quadraticCurveTo(x-xOffset-50, y-50, x-50, y-50);
 			ctx.fillStyle = "#A9C704";
 			ctx.globalAlpha = 0.5;
 			ctx.fill();
-			ctx.globalAlpha = 1;
 			ctx.restore();
 			ctx.closePath();
 		}
@@ -63,12 +85,15 @@ var plant = {
 		ctx.lineWidth = (length/10) * 0.8;
 		ctx.beginPath();
 		ctx.moveTo(Math.random()*5, Math.random()*5);
-		ctx.lineTo(Math.random()*5, Math.random()*5-length);
+		ctx.quadraticCurveTo(Math.random()*(-30-30)+30, Math.random()*-length, Math.random()*5, Math.random()*5-length);
 		ctx.stroke();
 		ctx.closePath();
 
 		if(Math.random()<0.5){
 			this.drawLeaf(0, -length);
+			if(Math.random()<0.2){
+				this.drawLeaf(0, -length);
+			}
 		}
 
 		ctx.translate(0, -length);
@@ -86,11 +111,14 @@ var plant = {
 			this.drawStem(length);
 			ctx.restore();
 		}else{
-			ctx.beginPath();
-			ctx.fillStyle = "#C7008C";
-			ctx.ellipse(0, 0, 10, 10, 0, 0, 2*Math.PI);
-			ctx.fill();
-			ctx.closePath();
+			if(Math.random()<0.5){
+				this.drawPetal(0, 0);
+			}
+			// ctx.beginPath();
+			// ctx.fillStyle = "#C7008C";
+			// ctx.ellipse(0, 0, 10, 10, 0, 0, 2*Math.PI);
+			// ctx.fill();
+			// ctx.closePath();
 		}
 	}
 }
