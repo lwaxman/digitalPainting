@@ -30,9 +30,9 @@ var setup = function(){
 var plant = {
 	petalGradient: function(){
 		var gradient = ctx.createRadialGradient(0, 0, 100, 50, 50, 5);
-		gradient.addColorStop(0, '#A42BB9'); 
-		gradient.addColorStop(0.3, '#DE497D');   
-		gradient.addColorStop(1, '#E6BAFF'); 
+		gradient.addColorStop(0, '#BD4400'); 
+		gradient.addColorStop(0.5, '#FF9B00');   
+		gradient.addColorStop(1, '#F6FF00'); 
 		return gradient; 
 	},
 	drawPetal: function(x, y){
@@ -58,8 +58,8 @@ var plant = {
 	},
 	leafGradient: function(x, y, h){
 		var gradient = ctx.createRadialGradient(x, y, h, x, y, 5);
-		gradient.addColorStop(0, '#A9C704'); 
-		gradient.addColorStop(1, '#477705'); 
+		gradient.addColorStop(0, '#00B7FF'); 
+		gradient.addColorStop(1, '#006FFF'); 
 		return gradient; 
 	},
 	drawLeaf: function(x, y){
@@ -69,7 +69,7 @@ var plant = {
 		var stemLength = Math.random()*(100-50)+50;
 
 		ctx.save();
-		ctx.strokeStyle = "#477705";
+		ctx.strokeStyle = "#006FFF";
 		ctx.lineCap = 'round';
 		ctx.lineWidth =  5;	
 		ctx.beginPath();
@@ -88,7 +88,7 @@ var plant = {
 			ctx.quadraticCurveTo(x-xOffset, y-100, x, y-leafHeight-stemLength);
 			ctx.quadraticCurveTo(x+xOffset, y-100, x, y-stemLength);
 			ctx.fillStyle = this.leafGradient(x, y-stemLength, leafHeight);
-			ctx.globalAlpha = 1;
+			ctx.globalAlpha = 0.95;
 			ctx.fill();
 			ctx.restore();
 			ctx.closePath();
@@ -97,7 +97,7 @@ var plant = {
 	},
 	drawStem: function(length){	
 		var flower = Math.random();
-		ctx.strokeStyle = "#529206";
+		ctx.strokeStyle = "#0D3EFF";
 		ctx.lineCap = 'round';
 		ctx.lineWidth = (length/10) * 0.8;
 		ctx.beginPath();
