@@ -9,8 +9,8 @@ var stemStartLength = canvas.height/6;
 var setup = function(){
 	ctx.rect(0, 0, canvas.width, canvas.height);
 	var grd = ctx.createLinearGradient(0, 0, 0, canvas.height);
-	grd.addColorStop(0, '#FFF');//'#FBFFE3');   
-	grd.addColorStop(1, '#DDD');//'#C7BD8F'); 
+	grd.addColorStop(0, '#E6FFBA');//'#FBFFE3');   
+	grd.addColorStop(1, '#9CFFF8');//'#C7BD8F'); 
 	ctx.fillStyle = grd;
 	ctx.fill();
 	ctx.imageSmoothingEnabled = true;
