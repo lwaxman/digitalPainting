@@ -3,6 +3,9 @@ var ctx = canvas.getContext("2d");
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
+var stemStartLength = 200;
+
+
 var setup = function(){
 	ctx.rect(0, 0, canvas.width, canvas.height);
 	var grd = ctx.createLinearGradient(0, 0, 0, canvas.height);
@@ -18,11 +21,18 @@ var setup = function(){
 	ctx.save();
 	ctx.translate(xPos, yPos);
 	ctx.rotate((Math.random()*(-25-25)+25) * Math.PI/180);
-	plant.drawStem(200);
+	plant.drawStem(stemStartLength);
 	ctx.restore();
 }; 
 
 var plant = {
+	petalGradient: function(){
+		var gradient = ctx.createRadialGradient(0, 0, 100, 50, 50, 5);
+		gradient.addColorStop(0, '#A42BB9'); 
+		gradient.addColorStop(0.3, '#DE497D');   
+		gradient.addColorStop(1, '#E6BAFF'); 
+		return gradient; 
+	},
 	drawPetal: function(x, y){
 		var angle = Math.random()*50;
 		var yOffset = Math.random()*(100-70)+70;
@@ -38,8 +48,8 @@ var plant = {
 			ctx.moveTo(x, y);
 			ctx.quadraticCurveTo(x+xOffset, y-50, x, y-yOffset);
 			ctx.quadraticCurveTo(x-xOffset, y-50, x, y);
-			ctx.fillStyle = "#E695C7";
-			ctx.globalAlpha = 0.8;
+			ctx.fillStyle = this.petalGradient();
+			ctx.globalAlpha = 0.9;
 			ctx.fill();
 			ctx.restore();
 			ctx.closePath();	
@@ -49,7 +59,7 @@ var plant = {
 	drawLeaf: function(x, y){
 		var leafW = Math.random()*(8-5)+5;
 		var leafH = 10;
-		var angle = Math.random()*(-45-45)+45;
+		var angle = Math.random()*(-20-20)+20;
 		var stemLength = Math.random()*(100-50)+50;
 
 		ctx.save();
@@ -59,7 +69,7 @@ var plant = {
 		ctx.beginPath();
 		ctx.moveTo(x, y);
 		ctx.rotate(angle * Math.PI/180);
-		ctx.quadraticCurveTo(x-30, y+30, x-50, y-50);
+		ctx.quadraticCurveTo(x-(Math.random()*(-40)+20), y-(Math.random()*(-40)+20), x, y-stemLength);
 		ctx.stroke();
 		ctx.closePath();
 
@@ -68,9 +78,9 @@ var plant = {
 			var leafHeight = Math.random()*(j*60-j*40)+j*40;
 			ctx.save(); 
 			ctx.beginPath();
-			ctx.moveTo(x-50, y-50);
-			ctx.quadraticCurveTo(x+xOffset-50, y-50, x-50, y-leafHeight-50);
-			ctx.quadraticCurveTo(x-xOffset-50, y-50, x-50, y-50);
+			ctx.moveTo(x, y-stemLength);
+			ctx.quadraticCurveTo(x-xOffset, y-100, x, y-leafHeight-stemLength);
+			ctx.quadraticCurveTo(x+xOffset, y-100, x, y-stemLength);
 			ctx.fillStyle = "#A9C704";
 			ctx.globalAlpha = 0.5;
 			ctx.fill();
@@ -80,6 +90,7 @@ var plant = {
 		ctx.restore();
 	},
 	drawStem: function(length){	
+		var flower = Math.random();
 		ctx.strokeStyle = "#529206";
 		ctx.lineCap = 'round';
 		ctx.lineWidth = (length/10) * 0.8;
@@ -89,9 +100,9 @@ var plant = {
 		ctx.stroke();
 		ctx.closePath();
 
-		if(Math.random()<0.5){
+		if(Math.random()<0.8  && flower>0.5){
 			this.drawLeaf(0, -length);
-			if(Math.random()<0.2){
+			if(Math.random()<0.8 && flower>0.5){
 				this.drawLeaf(0, -length);
 			}
 		}
@@ -100,7 +111,7 @@ var plant = {
 
 		length *= Math.random()*(0.9-0.8)+0.8;
 
-		if(length>110) {
+		if(length>(stemStartLength*0.55)) {
 			ctx.save();
 			ctx.rotate((Math.random()*(40-15)+15) * Math.PI/180);
 			this.drawStem(length);
@@ -111,7 +122,7 @@ var plant = {
 			this.drawStem(length);
 			ctx.restore();
 		}else{
-			if(Math.random()<0.5){
+			if(flower<0.6){
 				this.drawPetal(0, 0);
 			}
 			// ctx.beginPath();
