@@ -27,10 +27,7 @@ var setup = function(){
 
 var plant = {
 	petalGradient: function(h){
-		// console.log(h);
-		// var gradient = ctx.createRadialGradient(x, y, h, x, y, 5);
 		var gradient = ctx.createRadialGradient(0, 0, 100, 0, 0, 5);
-		// gradient.addColorStop(0, '#BD4400'); 
 		gradient.addColorStop(0.5, '#FF9B00');   
 		gradient.addColorStop(1, '#DB00FF'); 
 		return gradient; 
@@ -95,6 +92,8 @@ var plant = {
 		ctx.stroke();
 		ctx.closePath();
 
+
+
 		for(var j=4; j>1; j--){
 			var xOffset = Math.random()*(j*30-j*20)+j*20;
 			var leafHeight = Math.random()*(j*60-j*40)+j*40;
@@ -104,7 +103,6 @@ var plant = {
 			ctx.quadraticCurveTo(x-xOffset, y-100, x, y-leafHeight-stemLength);
 			ctx.quadraticCurveTo(x+xOffset, y-100, x, y-stemLength);
 			ctx.fillStyle = this.leafGradient(x, y-stemLength, leafHeight);
-			// ctx.globalAlpha = 0.95;
 			ctx.fill();
 
 			ctx.beginPath();
@@ -116,19 +114,24 @@ var plant = {
 			ctx.lineJoin = 'round';
 			ctx.globalAlpha = 0.95;
 			ctx.stroke();
-			ctx.restore();
 			ctx.closePath();
+			ctx.restore();
 		}
 		ctx.restore();
 	},
 	drawStem: function(length){	
 		var flower = Math.random();
+
 		ctx.strokeStyle = "#0D3EFF";
 		ctx.lineCap = 'round';
 		ctx.lineWidth = (length/10) * 0.8;
 		ctx.beginPath();
 		ctx.moveTo(Math.random()*5, Math.random()*5);
 		ctx.quadraticCurveTo(Math.random()*(-30-30)+30, Math.random()*-length, Math.random()*5, Math.random()*5-length);
+		ctx.stroke();
+		ctx.strokeStyle = "#000";
+		ctx.lineCap = 'square';
+		ctx.lineWidth = Math.random()*(3-2)+2;
 		ctx.stroke();
 		ctx.closePath();
 
@@ -157,11 +160,6 @@ var plant = {
 			if(flower<0.6){
 				this.drawPetal(0, 0);
 			}
-			// ctx.beginPath();
-			// ctx.fillStyle = "#C7008C";
-			// ctx.ellipse(0, 0, 10, 10, 0, 0, 2*Math.PI);
-			// ctx.fill();
-			// ctx.closePath();
 		}
 	}
 }
