@@ -14,6 +14,7 @@ var getRandomColour = function(){
 }
 var leafColours = [getRandomColour(), getRandomColour()];
 var stemColour = leafColours[0];
+var petalColours = getRandomColour();//[getRandomColour(), getRandomColour()];
 
 var setup = function(){
 	ctx.rect(0, 0, canvas.width, canvas.height);
@@ -39,20 +40,22 @@ var plant = {
 		return Math.random()*(3-2)+2;
 	},
 	//////////////////////////////////////////////////////////////////////////////////////////////// DRAW FLOWER
-	petalGradient: function(h){
-		var gradient = ctx.createRadialGradient(0, 0, 100, 0, 0, 5);
-		gradient.addColorStop(0.5, '#FF9B00');   
-		gradient.addColorStop(1, '#DB00FF'); 
+	petalFGGradient: function(h){
+		var gradient = ctx.createRadialGradient(0, 0, 120, 0, 0, 5);
+		gradient.addColorStop(0, petalColours);   
+		gradient.addColorStop(1, 'yellow'); 
 		return gradient; 
 	},
 	drawFlower: function(x, y){
-		var openAngle = Math.random()*45;
-		var petalCount = Math.round(Math.random()*(6-3)+3);
-		var petalHeight = Math.random()*(140-100)+100;
-		petalWidth = Math.random()*((petalHeight*0.8)-(petalHeight*0.5))+(petalHeight*0.5);
+		openAngle = Math.random()*(45-30)+30;
+		petalCount = Math.round(Math.random()*(6-3)+3);
+		petalHeight = Math.random()*(140-100)+100;
+		petalWidth = Math.random()*(60-50)+50;
+		// petalWidth = Math.random()*((petalHeight*0.8)-(petalHeight*0.5))+(petalHeight*0.5);
 		ctx.save();
 		ctx.rotate( -(openAngle*petalCount/2) *Math.PI/180);
-		ctx.fillStyle = 'red';
+		ctx.fillStyle = this.petalFGGradient();
+		ctx.strokeStyle = this.getStrokeWidth();
 		for(i=0;i<petalCount;i++){
 			ctx.save();
 			ctx.beginPath();
@@ -63,15 +66,26 @@ var plant = {
 			ctx.fill();
 			ctx.closePath();
 			ctx.restore();
+			
+			offset = Math.random()*(-5-5)-5;
+			ctx.save();
+			ctx.beginPath();
+			ctx.moveTo(x, y);
+			ctx.rotate( (openAngle*i) *Math.PI/180);
+			ctx.quadraticCurveTo(-petalWidth+offset, -petalHeight*1.3, x, y-petalHeight);
+			ctx.quadraticCurveTo(petalWidth+offset, -petalHeight*1.3, x, y);
+			ctx.stroke();
+			ctx.closePath();
+			ctx.restore();
 		}
 		ctx.restore();
 		if(openAngle>20){	
-			openAngle=60;
+			petalWidth = Math.random()*(40-25)+25;
 			ctx.save();
-			ctx.rotate( -openAngle *Math.PI/180);
-			ctx.fillStyle = '#00FFBB';
+			ctx.rotate( -(openAngle*(petalCount-1)/2) *Math.PI/180);
+			ctx.fillStyle = petalColours;
 			petalHeight *= 0.6;
-			for(i=0;i<2;i++){
+			for(i=0;i<petalCount-1;i++){
 				ctx.save();
 				ctx.beginPath();
 				ctx.moveTo(x, y);
@@ -81,6 +95,18 @@ var plant = {
 				ctx.fill();
 				ctx.closePath();
 				ctx.restore();
+
+				offset = Math.random()*(-5-5)-5;
+				ctx.save();
+				ctx.beginPath();
+				ctx.moveTo(x, y);
+				ctx.rotate( (openAngle*i) *Math.PI/180);
+				ctx.quadraticCurveTo(-petalWidth*1.2+offset, -petalHeight*1.4, x, y-petalHeight);
+				ctx.quadraticCurveTo(petalWidth*1.2+offset, -petalHeight*1.4, x, y);
+				ctx.stroke();
+				ctx.closePath();
+				ctx.restore();
+
 			}
 			ctx.restore();
 		}
@@ -199,7 +225,7 @@ var plant = {
 		ctx.moveTo(fillOffset, 0);
 		ctx.quadraticCurveTo(xOffset, yOffset, fillOffset, -length);
 		ctx.lineTo(10, -length);
-		ctx.quadraticCurveTo(xOffset+fillOffset, yOffset, 10+fillOffset, 10+fillOffset);
+		ctx.quadraticCurveTo(xOffset+fillOffset, yOffset, 10+fillOffset, 5+fillOffset);
 		ctx.fill();
 		ctx.closePath();
 
@@ -210,7 +236,7 @@ var plant = {
 		ctx.moveTo(0, 0);
 		ctx.quadraticCurveTo(xOffset, yOffset, 0, -length);
 		ctx.lineTo(10, -length);
-		ctx.quadraticCurveTo(xOffset, yOffset, 10, 10);
+		ctx.quadraticCurveTo(xOffset, yOffset, 10, 0);
 		ctx.stroke();
 		ctx.closePath();
 
