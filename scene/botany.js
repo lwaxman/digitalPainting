@@ -6,12 +6,21 @@ canvas.height = window.innerHeight;
 var stemStartLength = canvas.height/6;
 
 
+var getRandomColour = function(){
+	red = Math.round(Math.random()*255);
+	green = Math.round(Math.random()*255);
+	blue = Math.round(Math.random()*255);
+	return 'rgb('+red+','+green+','+blue+')';
+}
+var leafColours = [getRandomColour(), getRandomColour()];
+var stemColour = leafColours[0];
+
 var setup = function(){
 	ctx.rect(0, 0, canvas.width, canvas.height);
 	var grd = ctx.createLinearGradient(0, 0, 0, canvas.height);
 	grd.addColorStop(0, '#FFF');//'#FBFFE3');   
 	grd.addColorStop(1, '#DDD');//'#C7BD8F'); 
-	ctx.fillStyle = grd;
+	ctx.fillStyle = "#FFF";
 	ctx.fill();
 	ctx.imageSmoothingEnabled = true;
 
@@ -26,13 +35,17 @@ var setup = function(){
 }; 
 
 var plant = {
+	getStrokeWidth: function(){
+		return Math.random()*(3-2)+2;
+	},
+	//////////////////////////////////////////////////////////////////////////////////////////////// DRAW FLOWER
 	petalGradient: function(h){
 		var gradient = ctx.createRadialGradient(0, 0, 100, 0, 0, 5);
 		gradient.addColorStop(0.5, '#FF9B00');   
 		gradient.addColorStop(1, '#DB00FF'); 
 		return gradient; 
 	},
-	drawPetal: function(x, y){
+	drawFlower: function(x, y){
 		var openAngle = Math.random()*45;
 		var petalCount = Math.round(Math.random()*(6-3)+3);
 		var petalHeight = Math.random()*(140-100)+100;
@@ -56,7 +69,7 @@ var plant = {
 			openAngle=60;
 			ctx.save();
 			ctx.rotate( -openAngle *Math.PI/180);
-			ctx.fillStyle = 'orange';
+			ctx.fillStyle = '#00FFBB';
 			petalHeight *= 0.6;
 			for(i=0;i<2;i++){
 				ctx.save();
@@ -72,10 +85,11 @@ var plant = {
 			ctx.restore();
 		}
 	},
+	//////////////////////////////////////////////////////////////////////////////////////////////// DRAW LEAF
 	leafGradient: function(x, y, h){
-		var gradient = ctx.createRadialGradient(x, y, h, x, y, 5);
-		gradient.addColorStop(0, '#00B7FF'); 
-		gradient.addColorStop(1, '#006FFF'); 
+		gradient = ctx.createRadialGradient(x+100, y, 10, x+100, y, h);
+		gradient.addColorStop(0, leafColours[0]); 
+		gradient.addColorStop(0.8, leafColours[1]); 
 		return gradient; 
 	},
 	drawLeaf: function(x, y){
@@ -86,39 +100,42 @@ var plant = {
 		var veinCtx = veinCanvas.getContext("2d");
 
 		leafCanvas.width = 200; 
-		leafCanvas.height = 200; 
+		leafCanvas.height = 300; 
 
 		veinCanvas.width = 200; 
-		veinCanvas.height = 200; 
+		veinCanvas.height = 300; 
 
 		var currentCount = 1;
 		var x = [210];
 		var y = [210];
-		var r = [210];
 		x[0] = 0;
 		y[0] = 0;
-		r[0] = 10;
-		var newR = 10;
+		newR = 10;
+
+		var leafHeight = Math.random()*(100)+200;
+		var leafWidth = Math.random()*(180-100)+100;
+
 		leafCtx.save();
-		leafCtx.fillStyle = "blue";
+		leafCtx.fillStyle = this.leafGradient(x, y, leafHeight); //"blue";
 		leafCtx.translate(x, y);
 		leafCtx.beginPath();
 		leafCtx.moveTo(100,0);
-		leafCtx.quadraticCurveTo(0, 30, 100, 200);
-		leafCtx.quadraticCurveTo(200, 30, 100, 0);
+		leafCtx.quadraticCurveTo(100-leafWidth, 30, 100, leafHeight);
+		leafCtx.quadraticCurveTo(100+leafWidth, 30, 100, 0);
 		leafCtx.closePath();
 		leafCtx.fill();
 		leafCtx.restore();
 
-		veinCtx.strokeStyle = "orange";
-		veinCtx.lineWidth = 2;
+		veinCtx.strokeStyle = stemColour;
+		veinCtx.lineWidth = 4;
+		veinCtx.globalAlpha = 0.98;
+		veinCtx.lineCap = 'round';
 		veinCtx.save();
 		veinCtx.translate(x+100, y);
 		veinCtx.rotate(45 * Math.PI/180)
 		while(currentCount<100){
 			var newX = Math.random()*(0+newR - 200-newR) +  200-newR;
 			var newY = Math.random()*(0+newR - 200-newR) +  200-newR;
-
 			var closestDist = 100000000;
 			var closestIndex = 0;
 
@@ -133,9 +150,8 @@ var plant = {
 			}
 			var angle = Math.atan2(newY-y[closestIndex]+newR, newX-x[closestIndex]+newR);
 
-			x[currentCount] = x[closestIndex] + Math.cos(angle) * (r[closestIndex]+newR);
-			y[currentCount] = y[closestIndex] + Math.sin(angle) * (r[closestIndex]+newR);
-			r[currentCount] = newR;
+			x[currentCount] = x[closestIndex] + Math.cos(angle) * (newR+newR);
+			y[currentCount] = y[closestIndex] + Math.sin(angle) * (newR+newR);
 
 			veinCtx.beginPath();
 			veinCtx.moveTo(x[currentCount],y[currentCount]);
@@ -145,46 +161,58 @@ var plant = {
 
 			currentCount++;
 		}
-		// veinCtx.translate(0, 100);
-		// veinCtx.beginPath();
 		veinCtx.restore();
 		veinCtx.globalCompositeOperation = 'destination-atop';
 		veinCtx.drawImage(leafCanvas, 0, 0);
+		veinCtx.filter = 'blur(100px)';
 
+		ctx.strokeStyle = "#000";
 		ctx.save();
 		ctx.translate(x, y);
 		ctx.rotate( (Math.random()*(-180)-90) * Math.PI/180);
   		ctx.drawImage(veinCanvas, -100, 0);
-		// ctx.strokeRect(0,0, canvas.width, canvas.height);
-		// ctx.stroke();
-  		// ctx.scale(-1,1);
-  		// ctx.drawImage(veinCanvas, 0, 0);
+		ctx.beginPath();
+		ctx.translate(-100, 0);
+		ctx.moveTo(100,0);
+		ctx.quadraticCurveTo(100-leafWidth+10, 30, 100, leafHeight);
+		ctx.lineWidth = this.getStrokeWidth();
+		ctx.stroke();
+		ctx.quadraticCurveTo(100+leafWidth+10, 30, 100, 0);
+		ctx.lineWidth = Math.random()*(3-2)+2;
+		ctx.stroke();
 		ctx.restore();
-		// ctx.globalCompositeOperation = 'source-over';
 	},
+	//////////////////////////////////////////////////////////////////////////////////////////////// DRAW STEM
 	drawStem: function(length){	
 		var flower = Math.random();
 
-		ctx.strokeStyle = "#0D3EFF";
-		ctx.lineCap = 'round';
-		ctx.lineWidth = (length/10) * 0.8;
+		var xOffset = Math.random()*(-30-30)+30;
+		var yOffset = Math.random()*-length;
+		var lineWidth = (length/10) * 0.8;
+
+		var fillOffset = Math.random()*(-5-5)+5;
+
+		//fill
+		ctx.fillStyle = stemColour;
+		ctx.lineWidth = this.getStrokeWidth();
 		ctx.beginPath();
-		ctx.moveTo(Math.random()*5, Math.random()*5);
-		ctx.quadraticCurveTo(Math.random()*(-30-30)+30, Math.random()*-length, Math.random()*5, Math.random()*5-length);
-		ctx.stroke();
-		ctx.strokeStyle = "orange";
-		ctx.lineCap = 'square';
-		ctx.lineWidth = 2;
-		ctx.stroke();
+		ctx.moveTo(fillOffset, 0);
+		ctx.quadraticCurveTo(xOffset, yOffset, fillOffset, -length);
+		ctx.lineTo(10, -length);
+		ctx.quadraticCurveTo(xOffset+fillOffset, yOffset, 10+fillOffset, 10+fillOffset);
+		ctx.fill();
 		ctx.closePath();
 
-
-		if(Math.random()<0.4){
-			this.drawLeaf(0, -length);
-			if(Math.random()<0.8 && flower>0.5){
-				this.drawLeaf(0, -length);
-			}
-		}
+		//stroke
+		ctx.strokeStyle = "#000";
+		ctx.lineWidth = this.getStrokeWidth();
+		ctx.beginPath();
+		ctx.moveTo(0, 0);
+		ctx.quadraticCurveTo(xOffset, yOffset, 0, -length);
+		ctx.lineTo(10, -length);
+		ctx.quadraticCurveTo(xOffset, yOffset, 10, 10);
+		ctx.stroke();
+		ctx.closePath();
 
 		ctx.translate(0, -length);
 
@@ -202,9 +230,17 @@ var plant = {
 			ctx.restore();
 		}else{
 			if(flower<0.6){
-				this.drawPetal(0, 0);
+				this.drawFlower(0, 0);
+			}else{
+				this.drawLeaf(0, 0);
 			}
 		}
+
+
+		if(Math.random()<0.4){
+			this.drawLeaf(0, -length);
+		}
+
 	}
 }
 
