@@ -12,28 +12,35 @@ var getRandomColour = function(){
 	blue = Math.round(Math.random()*255);
 	return 'rgb('+red+','+green+','+blue+')';
 }
-var leafColours = [getRandomColour(), getRandomColour()];
-var stemColour = leafColours[0];
-var petalColours = getRandomColour();//[getRandomColour(), getRandomColour()];
 
 var setup = function(){
+	ctx.fillStyle = "#fff";
 	ctx.rect(0, 0, canvas.width, canvas.height);
-	var grd = ctx.createLinearGradient(0, 0, 0, canvas.height);
-	grd.addColorStop(0, '#FFF');//'#FBFFE3');   
-	grd.addColorStop(1, '#DDD');//'#C7BD8F'); 
-	ctx.fillStyle = "#FFF";
 	ctx.fill();
 	ctx.imageSmoothingEnabled = true;
 
-	var xPos = canvas.width/2;
-	var yPos = canvas.height-50;
+	piece = canvas.height/4;
+	offset = canvas.width/4;
+	for(var i=1; i<4; i++){	
+		xPos = Math.random()*(canvas.width-offset - offset)+offset;
+		yPos = i*piece;
+		drawPlant(xPos, yPos+piece);
+	}
+
+}; 
+
+var drawPlant = function(x, y){
+
+	leafColours = [getRandomColour(), getRandomColour()];
+	stemColour = leafColours[0];
+	petalColours = getRandomColour();
 	
 	ctx.save();
-	ctx.translate(xPos, yPos);
+	ctx.translate(x, y);
 	ctx.rotate((Math.random()*(-25-25)+25) * Math.PI/180);
 	plant.drawStem(stemStartLength);
 	ctx.restore();
-}; 
+}
 
 var plant = {
 	getStrokeWidth: function(){
