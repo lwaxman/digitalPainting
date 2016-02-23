@@ -3,8 +3,9 @@ var ctx = canvas.getContext("2d");
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
-var stemStartLength = canvas.height/6;
+var scale = 1;
 
+var stemStartLength = canvas.height/6;
 
 var getRandomColour = function(){
 	red = Math.round(Math.random()*255);
@@ -21,11 +22,19 @@ var setup = function(){
 
 	piece = canvas.height/4;
 	offset = canvas.width/4;
-	for(var i=1; i<4; i++){	
-		xPos = Math.random()*(canvas.width-offset - offset)+offset;
-		yPos = i*piece;
-		drawPlant(xPos, yPos+piece);
-	}
+
+	ctx.save();
+	ctx.translate(canvas.width/2, canvas.height-100);
+	ctx.rotate((Math.random()*(-25-25)+25) * Math.PI/180);
+	// kalePlant.drawStem(500);
+	drawPlant(0, 0);
+	ctx.restore();
+
+	// for(var i=1; i<4; i++){	
+	// 	xPos = Math.random()*(canvas.width-offset - offset)+offset;
+	// 	yPos = i*piece;
+	// 	drawPlant(xPos, yPos+piece);
+	// }
 
 }; 
 
@@ -38,14 +47,79 @@ var drawPlant = function(x, y){
 	ctx.save();
 	ctx.translate(x, y);
 	ctx.rotate((Math.random()*(-25-25)+25) * Math.PI/180);
-	plant.drawStem(stemStartLength);
+	// kalePlant.drawStem(stemStartLength);
+	flowerPlant.drawStem(stemStartLength);
 	ctx.restore();
 }
 
-var plant = {
-	getStrokeWidth: function(){
-		return Math.random()*(3-2)+2;
-	},
+var getStrokeWidth = function(){
+	return Math.random()*(3-2)+2;
+}
+
+
+var degrees = function(degrees){
+	return degrees * Math.PI/180;
+}
+
+var startPath = function(){
+	ctx.save();
+	ctx.beginPath();
+}
+
+var endPath = function(){
+	ctx.closePath();
+	ctx.restore();
+}
+
+//open venation patterns
+//voronoi diagrams
+
+//black kale for Daviday
+var kalePlant = {
+	drawStem: function(length){
+		var xOffset = (Math.random()*(-30-30)+30) /scale;
+		var yOffset = (Math.random()*-length) /scale;
+		var lineWidth = (length/10) * 0.8;
+
+		var fillOffset = Math.random()*(-5-5)+5;
+
+		for(i=0; i<3; i++){
+
+			leafAngle = (Math.random()*(-30-30)+30) /scale;
+			leafLength = (length + Math.random()*(-50-50)+50) /scale;
+
+			ctx.save();
+			ctx.rotate( degrees(leafAngle) );
+
+			//fill
+			ctx.fillStyle = 'green';
+			ctx.lineWidth = getStrokeWidth();
+			ctx.beginPath();
+			ctx.moveTo(fillOffset, 0);
+			ctx.quadraticCurveTo(xOffset, yOffset, fillOffset, -leafLength);
+			ctx.lineTo(10, -leafLength);
+			ctx.quadraticCurveTo(xOffset+fillOffset, yOffset, 10+fillOffset, 5+fillOffset);
+			ctx.fill();
+			ctx.closePath();
+
+			//stroke
+			ctx.strokeStyle = "#000";
+			ctx.lineCap = 'round';
+			ctx.lineWidth = getStrokeWidth();
+			ctx.beginPath();
+			ctx.moveTo(0, 0);
+			ctx.quadraticCurveTo(xOffset, yOffset, 0, -leafLength);
+			ctx.lineTo(10, -leafLength);
+			ctx.quadraticCurveTo(xOffset, yOffset, 10, 0);
+			ctx.stroke();
+			ctx.closePath();
+
+			ctx.restore();
+		}
+	}
+}
+
+var flowerPlant = {
 	//////////////////////////////////////////////////////////////////////////////////////////////// DRAW FLOWER
 	petalFGGradient: function(h){
 		var gradient = ctx.createRadialGradient(0, 0, 120, 0, 0, 5);
@@ -56,34 +130,38 @@ var plant = {
 	drawFlower: function(x, y){
 		openAngle = Math.random()*(45-30)+30;
 		petalCount = Math.round(Math.random()*(6-3)+3);
-		petalHeight = Math.random()*(140-100)+100;
-		petalWidth = Math.random()*(60-50)+50;
-		// petalWidth = Math.random()*((petalHeight*0.8)-(petalHeight*0.5))+(petalHeight*0.5);
+		petalHeight = (Math.random()*(140-100)+100) /scale;
+		petalWidth = (Math.random()*(60-50)+50) /scale;
+
 		ctx.save();
 		ctx.rotate( -(openAngle*petalCount/2) *Math.PI/180);
 		ctx.fillStyle = this.petalFGGradient();
-		ctx.strokeStyle = this.getStrokeWidth();
+		ctx.strokeStyle = getStrokeWidth();
 		for(i=0;i<petalCount;i++){
-			ctx.save();
-			ctx.beginPath();
+			// ctx.save();
+			// ctx.beginPath();
+			startPath();
 			ctx.moveTo(x, y);
 			ctx.rotate( (openAngle*i) *Math.PI/180);
 			ctx.quadraticCurveTo(-petalWidth, -petalHeight*1.3, x, y-petalHeight);
 			ctx.quadraticCurveTo(petalWidth, -petalHeight*1.3, x, y);
 			ctx.fill();
-			ctx.closePath();
-			ctx.restore();
+			endPath();
+			// ctx.closePath();
+			// ctx.restore();
 			
 			offset = Math.random()*(-5-5)-5;
-			ctx.save();
-			ctx.beginPath();
+			// ctx.save();
+			// ctx.beginPath();
+			startPath();
 			ctx.moveTo(x, y);
 			ctx.rotate( (openAngle*i) *Math.PI/180);
 			ctx.quadraticCurveTo(-petalWidth+offset, -petalHeight*1.3, x, y-petalHeight);
 			ctx.quadraticCurveTo(petalWidth+offset, -petalHeight*1.3, x, y);
 			ctx.stroke();
-			ctx.closePath();
-			ctx.restore();
+			endPath();
+			// ctx.closePath();
+			// ctx.restore();
 		}
 		ctx.restore();
 		if(openAngle>20){	
@@ -132,11 +210,11 @@ var plant = {
 		var veinCanvas = document.createElement("canvas");
 		var veinCtx = veinCanvas.getContext("2d");
 
-		leafCanvas.width = 200; 
-		leafCanvas.height = 300; 
+		leafCanvas.width = 200 / scale; 
+		leafCanvas.height = 300 / scale; 
 
-		veinCanvas.width = 200; 
-		veinCanvas.height = 300; 
+		veinCanvas.width = 200 / scale; 
+		veinCanvas.height = 300 / scale; 
 
 		var currentCount = 1;
 		var x = [210];
@@ -145,16 +223,18 @@ var plant = {
 		y[0] = 0;
 		newR = 10;
 
-		var leafHeight = Math.random()*(100)+200;
-		var leafWidth = Math.random()*(180-100)+100;
+		half = leafCanvas.width/2;
+
+		var leafHeight = (Math.random()*(100)+200) /scale;
+		var leafWidth = (Math.random()*(180-100)+100) /scale;
 
 		leafCtx.save();
 		leafCtx.fillStyle = this.leafGradient(x, y, leafHeight); //"blue";
 		leafCtx.translate(x, y);
 		leafCtx.beginPath();
-		leafCtx.moveTo(100,0);
-		leafCtx.quadraticCurveTo(100-leafWidth, 30, 100, leafHeight);
-		leafCtx.quadraticCurveTo(100+leafWidth, 30, 100, 0);
+		leafCtx.moveTo(half,0);
+		leafCtx.quadraticCurveTo(half-leafWidth, 30, half, leafHeight);
+		leafCtx.quadraticCurveTo(half+leafWidth, 30, half, 0);
 		leafCtx.closePath();
 		leafCtx.fill();
 		leafCtx.restore();
@@ -166,6 +246,7 @@ var plant = {
 		veinCtx.save();
 		veinCtx.translate(x+100, y);
 		veinCtx.rotate(45 * Math.PI/180)
+
 		while(currentCount<100){
 			var newX = Math.random()*(0+newR - 200-newR) +  200-newR;
 			var newY = Math.random()*(0+newR - 200-newR) +  200-newR;
@@ -194,6 +275,7 @@ var plant = {
 
 			currentCount++;
 		}
+
 		veinCtx.restore();
 		veinCtx.globalCompositeOperation = 'destination-atop';
 		veinCtx.drawImage(leafCanvas, 0, 0);
@@ -208,7 +290,7 @@ var plant = {
 		ctx.translate(-100, 0);
 		ctx.moveTo(100,0);
 		ctx.quadraticCurveTo(100-leafWidth+10, 30, 100, leafHeight);
-		ctx.lineWidth = this.getStrokeWidth();
+		ctx.lineWidth = getStrokeWidth();
 		ctx.stroke();
 		ctx.quadraticCurveTo(100+leafWidth+10, 30, 100, 0);
 		ctx.lineWidth = Math.random()*(3-2)+2;
@@ -217,6 +299,8 @@ var plant = {
 	},
 	//////////////////////////////////////////////////////////////////////////////////////////////// DRAW STEM
 	drawStem: function(length){	
+
+		length = length;
 		var flower = Math.random();
 
 		var xOffset = Math.random()*(-30-30)+30;
@@ -227,7 +311,7 @@ var plant = {
 
 		//fill
 		ctx.fillStyle = stemColour;
-		ctx.lineWidth = this.getStrokeWidth();
+		ctx.lineWidth = getStrokeWidth();
 		ctx.beginPath();
 		ctx.moveTo(fillOffset, 0);
 		ctx.quadraticCurveTo(xOffset, yOffset, fillOffset, -length);
@@ -238,7 +322,7 @@ var plant = {
 
 		//stroke
 		ctx.strokeStyle = "#000";
-		ctx.lineWidth = this.getStrokeWidth();
+		ctx.lineWidth = getStrokeWidth();
 		ctx.beginPath();
 		ctx.moveTo(0, 0);
 		ctx.quadraticCurveTo(xOffset, yOffset, 0, -length);
@@ -276,5 +360,4 @@ var plant = {
 
 	}
 }
-
 setup();

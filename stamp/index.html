@@ -1,0 +1,190 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>~clicky?</title>
+        <style> 
+	        *{ margin: 0; }
+	        body{ 
+	        	background: blue; 
+	        	/*display: flex; */
+	        }
+	        canvas{ 
+	        	vertical-align: top;
+	        	background: white; 
+	        	/*margin: auto; */
+	        }
+        </style>
+    </head>
+    <body>
+    	<canvas></canvas>
+        <script>
+        	var canvas = document.getElementsByTagName('canvas')[0];
+			var c = canvas.getContext("2d");
+
+			var pCanvas = document.createElement('canvas');
+			var pc = pCanvas.getContext("2d");
+			document.body.appendChild(pCanvas);
+
+			pCanvas.width = 200; 
+			pCanvas.height = 200;
+
+			var canvasSize = function(){			
+				if(window.innerWidth > window.innerHeight){
+					size = window.innerHeight;
+				}else{
+					size = window.innerWidth;
+				}
+				canvas.width = size;
+				canvas.height = size;
+			}
+			canvasSize();
+
+			// canvas.width = window.innerWidth;
+			// canvas.height = window.innerHeight;
+
+			c.globalCompositeOperation = 'screen';
+
+			var background = function(shade){
+				c.fillStyle = shade; 
+				c.globalAlpha = 0.8;
+				c.fillRect(0, 0, canvas.width, canvas.height);
+				c.globalAlpha = 1;
+			}
+
+			var getRandomColour = function(){
+				red = Math.round(Math.random()*255);
+				green = Math.round(Math.random()*255);
+				blue = Math.round(Math.random()*255);
+				return 'rgba('+ red +','+ green +','+ blue + ',1)';
+			}
+
+			var patternCanvas = function(){
+				pc.drawImage(canvas, 0, 0, pCanvas.width, pCanvas.height);
+				dataURL = pCanvas.toDataURL();
+				// console.log(dataURL);
+
+			}
+
+			var whatever = function(e){
+				getBlendMode();
+
+				// console.log(e);
+
+				color = getRandomColour();
+				// w = canvas.width;
+				// h = canvas.height;
+				s = canvas.width
+				x = e.x; 
+				y = e.y;
+				bs = 400;
+
+				box( color, [bs, bs], [x, y] );
+
+				xOver = x + (bs/2) > s;
+				xUnder = x - (bs/2) < bs;
+
+				yOver = y + (bs/2) > s;
+				yUnder = y - (bs/2) < bs;
+
+				if(xOver){
+					console.log("xOver");
+					c.save();
+					c.translate(x-s, y);
+					box( color, [bs, bs], [0, 0] );
+					c.restore();
+				}
+				if(xUnder){
+					console.log("xUnder");
+					c.save();
+					c.translate(x+s, y);
+					box( color, [bs, bs], [0, 0] );
+					c.restore();
+				}
+				if(yOver){
+					console.log("yOver");
+					c.save();
+					c.translate(x, y-s);
+					box( color, [bs, bs], [0, 0] );
+					c.restore();
+				}
+				if(yUnder){
+					console.log("yUnder");
+					c.save();
+					c.translate(x, y+s);
+					box( color, [bs, bs], [0, 0] );
+					c.restore();
+				}
+				if(xOver && yOver){
+					console.log("xOver && yOver");
+					c.save();
+					c.translate(x-s, y-s);
+					box( color, [bs, bs], [0, 0] );
+					c.restore();
+				}
+				if(xOver && yUnder){
+					console.log('xOver && yUnder');
+					c.save();
+					c.translate(x-s, y+s);
+					box( color, [bs, bs], [0, 0] );
+					c.restore();
+				}
+				if(xUnder && yOver){
+					console.log('xUnder && yOver');
+					c.save();
+					c.translate(x+s, y-s);
+					box( color, [bs, bs], [0, 0] );
+					c.restore();
+				}
+				if(xUnder && yUnder){
+					console.log('xUnder && yUnder');
+					c.save();
+					c.translate(x+s, y+s);
+					box( color, [bs, bs], [0, 0] );
+					c.restore();
+				}
+
+				patternCanvas();
+			}
+
+			var repeatShape = function(xPos, yPos){
+				c.save();
+				c.translate(xPos, yPos);
+				box( color, [bs, bs], [0, 0] );
+				c.restore();
+			}
+
+			var flower = function(){
+				// c.
+			}
+
+			var box = function(color, size, pos){
+				pos = pos || [0, 0]; //default
+				c.fillStyle = color;
+				c.fillRect( pos[0]-(size[0]/2), pos[1]-(size[1]/2), size[0], size[1] );
+			}
+
+			var getBlendMode = function(){
+				if(Math.random()>0.5){
+					c.globalCompositeOperation = 'multiply';
+				}else{
+					c.globalCompositeOperation = 'screen';
+				}
+			}
+
+			var somethingRude = function(x, y){
+				c.save();
+				c.translate(x-50, y-50);
+				c.fillStyle = '#000';
+				c.fillRect(0, 0, 100, 100);
+				c.restore();
+			}
+
+			// window.onmousedown = whatever;
+			// window.onmouseup = whatever;
+			window.onclick = whatever;
+
+
+        </script>
+    </body>
+</html>
