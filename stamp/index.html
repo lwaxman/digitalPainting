@@ -40,7 +40,7 @@ TO DO:
 	        	position: fixed;
 	        	top: 0;
 	        	left: 0;
-	        	/*opacity: 0.8;*/
+	        	opacity: 0.8;
 	        	/*z-index: 1;*/
 	        }
 	        #help{
@@ -52,6 +52,7 @@ TO DO:
 	        	text-shadow: 0px 0px 20px white;
 	        	pointer-events: none;
 	        	transition: opacity 800ms;
+	        	z-index: 1;
 	        }
 	        p{
 				padding: 0 5px;
@@ -71,11 +72,11 @@ TO DO:
     		<p>CHEAT SHEET: </p>
     		<p class="group">1 = pattern preview</p>
     		<p>2 = stamp preview</p>
-    		<!-- <p>3 = toggle flower/square</p> -->
+    		<!-- <p>3 = toggle multipy/screen</p> -->
     		<p class="group">left/right = cycle colours</p>
     		<p>up/down = resize stamp</p>
     		<p class="group">c = clear image</p>
-    		<p>s = save pattern</p>
+    		<!-- <p>s = save pattern</p> -->
     		<p>h = toggle cheat sheet</p>
     	</div>
 	    <script>
@@ -104,10 +105,11 @@ TO DO:
 			var hideControls = true;
 			var drawingEnabled = true;
 			var toggleFlower = false;
-
+			var toggleHelp = true;
 
 			var mouseX = 0; 
 			var mouseY = 0;
+
 	///////////////////////////////////////////////////////////////////////////////////////////// COLOUR
 
 			var getRandomColour = function(){
@@ -226,7 +228,6 @@ TO DO:
 				c.drawImage(fCanvas, -bs/2, -bs/2, fCanvas.width, fCanvas.height);
 			}
 
-
 			newFlower( colour );
 
 	///////////////////////////////////////////////////////////////////////////////////////////// FOLLOW MOUSE
@@ -281,7 +282,7 @@ TO DO:
 			}
 			
 	///////////////////////////////////////////////////////////////////////////////////////////// KEYPRESS
-	
+
 			var keyPress = function(e){
 				// console.log(e);
 
@@ -355,6 +356,12 @@ TO DO:
 				// H : hide lexicon
 				if(e.keyIdentifier == "U+0048"){
 					toggleHelp=!toggleHelp; 
+					help = document.getElementById("help");
+					if(toggleHelp){
+						help.style.display = "block";
+					}else{
+						help.style.display = "none";
+					}
 
 				}
 
