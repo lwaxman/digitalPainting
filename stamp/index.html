@@ -44,7 +44,10 @@
     		<p>3 = toggle leaf/flower</p>
     		<p>left/right = cycle colours</p>
     	</div>
-        <script>
+	    <script>
+
+    ///////////////////////////////////////////////////////////////////////////////////////////// VARIABLES / SETUP
+
         	// main canvas
         	var canvas = document.getElementById("main");
 			var c = canvas.getContext("2d");
@@ -68,10 +71,7 @@
 			var drawingEnabled = true;
 			var toggleFlower = false;
 
-			var background = function(shade){
-				c.fillStyle = shade; 
-				c.fillRect(0, 0, canvas.width, canvas.height);
-			}
+	///////////////////////////////////////////////////////////////////////////////////////////// COLOUR
 
 			var getRandomColour = function(){
 				red = Math.round(Math.random()*255);
@@ -80,10 +80,15 @@
 				return 'rgba('+ red +','+ green +','+ blue + ',1)';
 			}
 
+	///////////////////////////////////////////////////////////////////////////////////////////// PATTERN
+
+
 			var patternCanvas = function(){
 				pc.drawImage(canvas, 0, 0, pCanvas.width, pCanvas.height);
 				document.body.style.background = 'url('+ pCanvas.toDataURL() +')';
 			}
+
+	///////////////////////////////////////////////////////////////////////////////////////////// DRAW (on click)
 
 			var bs = 300;
 			var cPos = 0;
@@ -135,12 +140,16 @@
 				}
 			}
 
+	///////////////////////////////////////////////////////////////////////////////////////////// WRAP
+
 			var wrapStamp = function(xPos, yPos){
 				c.save();
 				c.translate(xPos, yPos);
-				box( colour, [bs, bs]);
+				box( colour, bs);
 				c.restore();
 			}
+
+	///////////////////////////////////////////////////////////////////////////////////////////// FLOWER
 
 			var flower = function(colour, size){
 				var fCanvas = document.createElement("canvas");
@@ -148,27 +157,46 @@
 				fCanvas.width = bs; 
 				fCanvas.height = bs;
 
-				petalCount = Math.random()*(8-5)+5;
+				petalCount = Math.round(Math.random()*(8-5)+5);
 				petalAngle = 360/petalCount;
+
+				console.log(petalCount);
+
+				xOffset = Math.random()*( (size*0.4)-(size*0.1)) + (size*0.1);
+				yOffset = Math.random()*( (size*0.3)-(size*0.1)) + (size*0.1);
+
+				fc.fillStyle = colour;
+
 				for(i=0; i<petalCount; i++){
 					fc.save();
-					fc.translate(b2/2, bs/2);
-					fc.rotate( petalAngle*i );
+					fc.translate(size/2, size/2);
+					fc.rotate( petalAngle*i * Math.PI/180);
+					fc.beginPath();
+					fc.moveTo(0, 0);
+					fc.quadraticCurveTo(-xOffset, yOffset, 0, size/2);
+					fc.quadraticCurveTo(xOffset, yOffset, 0, 0);
+					fc.fill();
+					fc.closePath();
 					fc.restore();
 				}
+
+				c.drawImage(fCanvas, -size/2, -size/2, fCanvas.width, fCanvas.height);
 			}
+
+	///////////////////////////////////////////////////////////////////////////////////////////// BOX
 
 			var box = function(colour, size){
 				c.fillStyle = colour;
 				if(toggleFlower){
 					//leaf
-					c.fillRect( -(size[0]/2), -(size[1]/2), size[0], size[1] );
+					c.fillRect( -size/2, -size/2, size, size );
 				}else{
 					//flower
-					c.beginPath();
-					c.arc(0, 0, size[0]/2, 0, 2 * Math.PI);
-					c.fill();
-					c.closePath();
+					// c.beginPath();
+					// c.arc(0, 0, size[0]/2, 0, 2 * Math.PI);
+					// c.fill();
+					// c.closePath();
+					flower(colour, size);
 				}
 			}
 
@@ -180,6 +208,8 @@
 				}
 			}
 
+
+	///////////////////////////////////////////////////////////////////////////////////////////// KEYPRESS
 			var keyPress = function(e){
 				console.log(e);
 
@@ -272,14 +302,8 @@
 				}
 			}
 
-			// background( getRandomColour() );
 			window.onkeydown = keyPress;
 			window.onclick = draw;
-
-			// window.onmousedown = whatever;
-			// window.onmouseup = whatever;
-			
-
 
         </script>
     </body>
