@@ -17,6 +17,8 @@ TO DO:
 	        *{ 
 	        	margin: 0; 
 	        	font-family: 'Monaco', 'Menlo', monospace;
+	        	color: blue;
+	        	font-size: 14px;
 	        }
 	        canvas{ 
 	        	vertical-align: top;
@@ -45,11 +47,8 @@ TO DO:
 	        }
 	        #help{
 	        	position: fixed;
-	        	color: blue;
 	        	top: 50px;
 	        	left: 50px;
-	        	font-size: 14px;
-	        	text-shadow: 0px 0px 20px white;
 	        	pointer-events: none;
 	        	transition: opacity 800ms;
 	        	z-index: 1;
@@ -61,6 +60,20 @@ TO DO:
 	        }
 	        p.group{
 	        	margin-top: 15px;
+	        }
+	        #download{
+				background: white;
+				position: absolute;
+				bottom: 50px;
+				left: 50px;
+				padding: 0 5px;
+	        	background: white;
+	        	z-index: 10;
+	        	text-decoration: none;
+	        	cursor: pointer;
+	        }
+	        #download:hover{
+				color: red;
 	        }
         </style>
     </head>
@@ -79,6 +92,7 @@ TO DO:
     		<!-- <p>s = save pattern</p> -->
     		<p>h = toggle cheat sheet</p>
     	</div>
+    	<a id="download">download</a>
 	    <script>
 
     ///////////////////////////////////////////////////////////////////////////////////////////// VARIABLES / SETUP
@@ -280,13 +294,22 @@ TO DO:
 					c.globalCompositeOperation = 'screen';
 				}
 			}
+
+	///////////////////////////////////////////////////////////////////////////////////////////// DOWNLOAD
+
+			var download = document.getElementById("download");
+
+			download.addEventListener('click', function(ev) {
+			    download.href = canvas.toDataURL();
+			    download.download = "pattern.png";
+			}, false);
 			
 	///////////////////////////////////////////////////////////////////////////////////////////// KEYPRESS
 
 			var keyPress = function(e){
 				// console.log(e);
 
-				// 1 : toggle background
+				// 1 : toggle background preview
 				if(e.keyIdentifier == "U+0031"){
 					hideCanvas=!hideCanvas;
 					if(hideCanvas){
@@ -300,7 +323,7 @@ TO DO:
 					}
 				}
 
-				// 2 : toggle controls
+				// 2 : toggle stamp preview
 				if(e.keyIdentifier == "U+0032"){
 					hideControls=!hideControls;
 					if(hideControls){
