@@ -1,4 +1,14 @@
 <!doctype html>
+<!-- 
+
+TO DO: 
+- download
+- better flowers
+- gradients?
+- leaves? 
+- show placement on hover
+
+ -->
 <html>
     <head>
         <meta charset="utf-8">
@@ -10,8 +20,11 @@
 	        }
 	        canvas{ 
 	        	vertical-align: top;
-	        	background: white; 
+	        	/*background: white; */
 	        	transition: opacity 500ms;
+	        }
+	        #main{
+	        	background: white;
 	        }
 	        #stamp{
 	        	position: fixed;
@@ -23,26 +36,47 @@
 	        	opacity: 0;
 	        	transition: opacity 600ms;
 	        }
+	        #temp{
+	        	position: fixed;
+	        	top: 0;
+	        	left: 0;
+	        	/*opacity: 0.8;*/
+	        	/*z-index: 1;*/
+	        }
 	        #help{
 	        	position: fixed;
 	        	color: blue;
-	        	top: 100px;
+	        	top: 50px;
 	        	left: 50px;
 	        	font-size: 14px;
 	        	text-shadow: 0px 0px 20px white;
 	        	pointer-events: none;
 	        	transition: opacity 800ms;
 	        }
+	        p{
+				padding: 0 5px;
+	        	background: white;
+	        	display: block;
+	        }
+	        p.group{
+	        	margin-top: 15px;
+	        }
         </style>
     </head>
     <body>
     	<canvas id="main"></canvas>
     	<canvas id="stamp"></canvas>
+    	<canvas id="temp"></canvas>
     	<div id="help">
-    		<p>1 = view background</p>
-    		<p>2 = view stamp editor</p>
-    		<p>3 = toggle leaf/flower</p>
-    		<p>left/right = cycle colours</p>
+    		<p>CHEAT SHEET: </p>
+    		<p class="group">1 = pattern preview</p>
+    		<p>2 = stamp preview</p>
+    		<!-- <p>3 = toggle flower/square</p> -->
+    		<p class="group">left/right = cycle colours</p>
+    		<p>up/down = resize stamp</p>
+    		<p class="group">c = clear image</p>
+    		<p>s = save pattern</p>
+    		<p>h = toggle cheat sheet</p>
     	</div>
 	    <script>
 
@@ -71,6 +105,9 @@
 			var drawingEnabled = true;
 			var toggleFlower = false;
 
+
+			var mouseX = 0; 
+			var mouseY = 0;
 	///////////////////////////////////////////////////////////////////////////////////////////// COLOUR
 
 			var getRandomColour = function(){
@@ -81,7 +118,6 @@
 			}
 
 	///////////////////////////////////////////////////////////////////////////////////////////// PATTERN
-
 
 			var patternCanvas = function(){
 				pc.drawImage(canvas, 0, 0, pCanvas.width, pCanvas.height);
@@ -137,6 +173,8 @@
 					wrapStamp(x, y);
 
 					patternCanvas();
+					newFlower( colour );
+
 				}
 			}
 
@@ -145,58 +183,92 @@
 			var wrapStamp = function(xPos, yPos){
 				c.save();
 				c.translate(xPos, yPos);
-				box( colour, bs);
+				shape( colour );
 				c.restore();
 			}
 
 	///////////////////////////////////////////////////////////////////////////////////////////// FLOWER
 
-			var flower = function(colour, size){
-				var fCanvas = document.createElement("canvas");
-				var fc = fCanvas.getContext("2d");
+			var fCanvas = document.createElement("canvas");
+			var fc = fCanvas.getContext("2d");
+
+			var newFlower = function(colour){
 				fCanvas.width = bs; 
 				fCanvas.height = bs;
+
+				fc.clearRect(0, 0, fCanvas.width, fCanvas.height);
 
 				petalCount = Math.round(Math.random()*(8-5)+5);
 				petalAngle = 360/petalCount;
 
 				console.log(petalCount);
 
-				xOffset = Math.random()*( (size*0.4)-(size*0.1)) + (size*0.1);
-				yOffset = Math.random()*( (size*0.3)-(size*0.1)) + (size*0.1);
+				xOffset = Math.random()*( (bs*0.4)-(bs*0.1)) + (bs*0.1);
+				yOffset = Math.random()*( (bs*0.3)-(bs*0.1)) + (bs*0.1);
 
 				fc.fillStyle = colour;
 
 				for(i=0; i<petalCount; i++){
 					fc.save();
-					fc.translate(size/2, size/2);
+					fc.translate(bs/2, bs/2);
 					fc.rotate( petalAngle*i * Math.PI/180);
 					fc.beginPath();
 					fc.moveTo(0, 0);
-					fc.quadraticCurveTo(-xOffset, yOffset, 0, size/2);
+					fc.quadraticCurveTo(-xOffset, yOffset, 0, bs/2);
 					fc.quadraticCurveTo(xOffset, yOffset, 0, 0);
 					fc.fill();
 					fc.closePath();
 					fc.restore();
 				}
-
-				c.drawImage(fCanvas, -size/2, -size/2, fCanvas.width, fCanvas.height);
 			}
 
-	///////////////////////////////////////////////////////////////////////////////////////////// BOX
+			var drawFlower = function(){
+				c.drawImage(fCanvas, -bs/2, -bs/2, fCanvas.width, fCanvas.height);
+			}
 
-			var box = function(colour, size){
-				c.fillStyle = colour;
+
+			newFlower( colour );
+
+	///////////////////////////////////////////////////////////////////////////////////////////// FOLLOW MOUSE
+
+			var tCanvas = document.getElementById("temp");
+			var temp = tCanvas.getContext("2d");
+			tCanvas.width = window.innerWidth;
+			tCanvas.height = window.innerHeight;
+
+			document.body.appendChild(tCanvas);
+			
+			var followMouse = function(e){
+
+				// adapted from:
+				// http://www.html5canvastutorials.com/advanced/html5-canvas-mouse-coordinates/
+				var rect = canvas.getBoundingClientRect();
+		    	x =  e.clientX - rect.left;
+		    	y =  e.clientY - rect.top;
+
+		    	mouseX = x; 
+		    	mouseY = y;
+
+		    	drawTempStamp(mouseX, mouseY);
+			}
+
+			var drawTempStamp = function(x, y){
+				temp.clearRect(0, 0, tCanvas.width, tCanvas.height);
+				temp.drawImage(fCanvas, x-(bs/2), y-(bs/2), fCanvas.width, fCanvas.height);
+			}
+
+			window.onmousemove = followMouse;
+
+	///////////////////////////////////////////////////////////////////////////////////////////// SHAPE
+
+			var shape = function(colour, size){
 				if(toggleFlower){
 					//leaf
+					c.fillStyle = colour;
 					c.fillRect( -size/2, -size/2, size, size );
 				}else{
 					//flower
-					// c.beginPath();
-					// c.arc(0, 0, size[0]/2, 0, 2 * Math.PI);
-					// c.fill();
-					// c.closePath();
-					flower(colour, size);
+					drawFlower(colour);
 				}
 			}
 
@@ -207,11 +279,11 @@
 					c.globalCompositeOperation = 'screen';
 				}
 			}
-
-
+			
 	///////////////////////////////////////////////////////////////////////////////////////////// KEYPRESS
+	
 			var keyPress = function(e){
-				console.log(e);
+				// console.log(e);
 
 				// 1 : toggle background
 				if(e.keyIdentifier == "U+0031"){
@@ -219,9 +291,11 @@
 					if(hideCanvas){
 						drawingEnabled = false;
 						canvas.style.opacity = '0';
+						tCanvas.style.opacity = '0';
 					}else{
 						drawingEnabled = true;
 						canvas.style.opacity = '1';
+						tCanvas.style.opacity = '1';
 					}
 				}
 
@@ -231,17 +305,19 @@
 					if(hideControls){
 						drawingEnabled = true;
 						sCanvas.style.opacity = '0';
+						tCanvas.style.opacity = '1';
 					}else{
 						drawingEnabled = false;
 						sCanvas.style.opacity = '0.9';
+						tCanvas.style.opacity = '0';
 					}
 				}
 
 				// 3 : toggle flower/leaf
-				if(e.keyIdentifier == "U+0033"){
-					toggleFlower=!toggleFlower;
-					console.log(toggleFlower);
-				}
+				// if(e.keyIdentifier == "U+0033"){
+				// 	toggleFlower=!toggleFlower;
+				// 	console.log(toggleFlower);
+				// }
 
 
 				// U/D : size
@@ -249,12 +325,14 @@
 					console.log("Up");
 					bs += 10;
 					if(bs >= 500) bs = 500;	
+					newFlower( colour );
 					drawStamp();
 				}
 				if(e.keyIdentifier == "Down"){
 					console.log("Down");
 					bs -= 10;
 					if(bs <= 10) bs = 10;
+					newFlower( colour );
 					drawStamp();
 				}
 
@@ -263,13 +341,15 @@
 					console.log("Left");
 					cPos -= 1; 
 					if(cPos < 0) cPos = colours.length-1; 
-					console.log(cPos);
-					console.log(colours.length);
+					colour = colours[cPos];
+					newFlower( colour );
 				}
 				if(e.keyIdentifier == "Right"){
 					console.log("Right");
 					cPos += 1; 
 					if(cPos >= colours.length) cPos = 0; 
+					colour = colours[cPos];
+					newFlower( colour );
 				}
 
 				// H : hide lexicon
@@ -281,13 +361,25 @@
 				// C : clear canvas
 				if(e.keyIdentifier == "U+0043"){
 					c.clearRect(0, 0, canvas.width, canvas.height);
+					pc.clearRect(0, 0, pCanvas.width, pCanvas.height);
+					patternCanvas();
+				}
+
+				// S : download canvas
+				if(e.keyIdentifier == "U+0043"){
+					// download
 				}
 
 				colour = colours[cPos];
+
 				drawStamp();
+
 			}
 
 			var drawStamp = function(){
+
+				temp.clearRect(0, 0, tCanvas.width, tCanvas.height);
+
 				sc.fillStyle = "white";
 				sc.fillRect(0, 0, sCanvas.width, sCanvas.height);
 				sc.fillStyle = colour;
@@ -295,13 +387,12 @@
 				if(toggleFlower){
 					sc.fillRect( (sCanvas.width/2)-(bs/2), (sCanvas.height/2)-(bs/2), bs, bs);
 				}else{
-					sc.beginPath();
-					sc.arc( sCanvas.width/2, sCanvas.height/2, bs/2, 0, 2 * Math.PI );
-					sc.fill();
-					sc.closePath();
+					sc.drawImage(fCanvas, (sCanvas.width/2)-(bs/2), (sCanvas.height/2)-(bs/2), fCanvas.width, fCanvas.height);
+					temp.drawImage(fCanvas, mouseX-(bs/2), mouseY-(bs/2), fCanvas.width, fCanvas.height);
 				}
 			}
 
+			// window.onmousedown = mouseDown; 
 			window.onkeydown = keyPress;
 			window.onclick = draw;
 
