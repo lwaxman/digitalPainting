@@ -5,45 +5,54 @@
         <title>~clicky?</title>
         <style> 
 	        *{ margin: 0; }
-	        body{ 
-	        	background: blue; 
-	        	/*display: flex; */
-	        }
 	        canvas{ 
 	        	vertical-align: top;
 	        	background: white; 
-	        	/*margin: auto; */
+	        	transition: opacity 800ms;
+	        }
+	        #stamp{
+	        	position: fixed;
+	        	top: 0;
+	        	left: 0;
+	        	width: 100%;
+	        	height: 100%;
+	        	background: white;
+	        	opacity: 0;
+	        	transition: opacity 800ms;
+	        }
+	        #stamp canvas{
+	        	border: 10px solid blue;
 	        }
         </style>
     </head>
     <body>
-    	<canvas></canvas>
+    	<canvas id="main"></canvas>
+    	<canvas id="stamp"></canvas>
+    	<div id="help">
+    		<p>1 = toggle background view</p>
+    		<p>2 = toggle stamp editor</p>
+    		<p>3 = </p>
+    	</div>
         <script>
-        	var canvas = document.getElementsByTagName('canvas')[0];
+        	var canvas = document.getElementById("main");
 			var c = canvas.getContext("2d");
+			canvas.width = window.innerWidth;
+			canvas.height = window.innerHeight;
 
-			var pCanvas = document.createElement('canvas');
+			var pCanvas = document.createElement("canvas");
 			var pc = pCanvas.getContext("2d");
-			document.body.appendChild(pCanvas);
+			pCanvas.width = canvas.width/5; 
+			pCanvas.height = canvas.height/5;
 
-			pCanvas.width = 200; 
-			pCanvas.height = 200;
+			var sCanvas = document.getElementById("stamp");
+			var sc = sCanvas.getContext("2d");
+			sCanvas.width = canvas.width; 
+			sCanvas.height = canvas.height;
 
-			var canvasSize = function(){			
-				if(window.innerWidth > window.innerHeight){
-					size = window.innerHeight;
-				}else{
-					size = window.innerWidth;
-				}
-				canvas.width = size;
-				canvas.height = size;
-			}
-			canvasSize();
-
-			// canvas.width = window.innerWidth;
-			// canvas.height = window.innerHeight;
-
-			c.globalCompositeOperation = 'screen';
+			var hideCanvas = false;
+			var hideControls = true;
+			var drawingEnabled = true;
+			var toggleFlower = false;
 
 			var background = function(shade){
 				c.fillStyle = shade; 
@@ -61,107 +70,82 @@
 
 			var patternCanvas = function(){
 				pc.drawImage(canvas, 0, 0, pCanvas.width, pCanvas.height);
-				dataURL = pCanvas.toDataURL();
-				// console.log(dataURL);
-
+				document.body.style.background = 'url('+ pCanvas.toDataURL() +')';
 			}
 
-			var whatever = function(e){
-				getBlendMode();
+			var bs = 300;
+			var cPos = 0;
+			var colours = [ getRandomColour(), getRandomColour(), getRandomColour(), getRandomColour(), getRandomColour() ];
+			var colour = colours[cPos];
 
-				// console.log(e);
+			var draw = function(e){
+				if(drawingEnabled){
 
-				color = getRandomColour();
-				// w = canvas.width;
-				// h = canvas.height;
-				s = canvas.width
-				x = e.x; 
-				y = e.y;
-				bs = 400;
+					getBlendMode();
 
-				box( color, [bs, bs], [x, y] );
+					w = canvas.width;
+					h = canvas.height;
+					x = e.offsetX; 
+					y = e.offsetY;
 
-				xOver = x + (bs/2) > s;
-				xUnder = x - (bs/2) < bs;
+					xOver = x + (bs/2) > w;
+					xUnder = x - (bs/2) < bs;
+					yOver = y + (bs/2) > h;
+					yUnder = y - (bs/2) < bs;
 
-				yOver = y + (bs/2) > s;
-				yUnder = y - (bs/2) < bs;
+					if(xOver){
+						wrapStamp(x-w, y);
+					}
+					if(xUnder){
+						wrapStamp(x+w, y);
+					}
+					if(yOver){
+						wrapStamp(x, y-h);
+					}
+					if(yUnder){
+						wrapStamp(x, y+h);
+					}
+					if(xOver && yOver){
+						wrapStamp(x-w, y-h);
+					}
+					if(xOver && yUnder){
+						wrapStamp(x-w, y+h);
+					}
+					if(xUnder && yOver){
+						wrapStamp(x+w, y-h);
+					}
+					if(xUnder && yUnder){
+						wrapStamp(x+w, y+h);
+					}
+					wrapStamp(x, y);
 
-				if(xOver){
-					console.log("xOver");
-					c.save();
-					c.translate(x-s, y);
-					box( color, [bs, bs], [0, 0] );
-					c.restore();
+					patternCanvas();
 				}
-				if(xUnder){
-					console.log("xUnder");
-					c.save();
-					c.translate(x+s, y);
-					box( color, [bs, bs], [0, 0] );
-					c.restore();
-				}
-				if(yOver){
-					console.log("yOver");
-					c.save();
-					c.translate(x, y-s);
-					box( color, [bs, bs], [0, 0] );
-					c.restore();
-				}
-				if(yUnder){
-					console.log("yUnder");
-					c.save();
-					c.translate(x, y+s);
-					box( color, [bs, bs], [0, 0] );
-					c.restore();
-				}
-				if(xOver && yOver){
-					console.log("xOver && yOver");
-					c.save();
-					c.translate(x-s, y-s);
-					box( color, [bs, bs], [0, 0] );
-					c.restore();
-				}
-				if(xOver && yUnder){
-					console.log('xOver && yUnder');
-					c.save();
-					c.translate(x-s, y+s);
-					box( color, [bs, bs], [0, 0] );
-					c.restore();
-				}
-				if(xUnder && yOver){
-					console.log('xUnder && yOver');
-					c.save();
-					c.translate(x+s, y-s);
-					box( color, [bs, bs], [0, 0] );
-					c.restore();
-				}
-				if(xUnder && yUnder){
-					console.log('xUnder && yUnder');
-					c.save();
-					c.translate(x+s, y+s);
-					box( color, [bs, bs], [0, 0] );
-					c.restore();
-				}
-
-				patternCanvas();
 			}
 
-			var repeatShape = function(xPos, yPos){
+			var wrapStamp = function(xPos, yPos){
 				c.save();
 				c.translate(xPos, yPos);
-				box( color, [bs, bs], [0, 0] );
+				box( colour, [bs, bs]);
 				c.restore();
 			}
 
 			var flower = function(){
-				// c.
+				
 			}
 
-			var box = function(color, size, pos){
-				pos = pos || [0, 0]; //default
-				c.fillStyle = color;
-				c.fillRect( pos[0]-(size[0]/2), pos[1]-(size[1]/2), size[0], size[1] );
+			var box = function(colour, size){
+				c.fillStyle = colour;
+				if(toggleFlower){
+					//leaf
+					c.fillRect( -(size[0]/2), -(size[1]/2), size[0], size[1] );
+				}else{
+					//flower
+					c.beginPath();
+					c.arc(0, 0, size[0]/2, 0, 2 * Math.PI);
+					c.fill();
+					c.closePath();
+				}
 			}
 
 			var getBlendMode = function(){
@@ -172,17 +156,94 @@
 				}
 			}
 
-			var somethingRude = function(x, y){
-				c.save();
-				c.translate(x-50, y-50);
-				c.fillStyle = '#000';
-				c.fillRect(0, 0, 100, 100);
-				c.restore();
+			var keyPress = function(e){
+				// console.log(e);
+
+				// 1 : toggle background
+				if(e.keyIdentifier == "U+0031"){
+					hideCanvas=!hideCanvas;
+					if(hideCanvas){
+						drawingEnabled = false;
+						canvas.style.opacity = '0';
+					}else{
+						drawingEnabled = true;
+						canvas.style.opacity = '1';
+					}
+				}
+
+				// 2 : toggle controls
+				if(e.keyIdentifier == "U+0032"){
+					hideControls=!hideControls;
+					if(hideControls){
+						drawingEnabled = true;
+						sCanvas.style.opacity = '0';
+					}else{
+						drawingEnabled = false;
+						sCanvas.style.opacity = '0.9';
+					}
+				}
+
+				// 3 : toggle flower/leaf
+				if(e.keyIdentifier == "U+0033"){
+					toggleFlower=!toggleFlower;
+					console.log(toggleFlower);
+				}
+
+
+				// U/D : size
+				if(e.keyIdentifier == "Up"){
+					console.log("Up");
+					bs += 10;
+					if(bs >= 500) bs = 500;	
+					drawStamp();
+				}
+				if(e.keyIdentifier == "Down"){
+					console.log("Down");
+					bs -= 10;
+					if(bs <= 10) bs = 10;
+					drawStamp();
+				}
+
+				// L/R : colours
+				if(e.keyIdentifier == "Left"){
+					console.log("Left");
+					cPos -= 1; 
+					if(cPos < 0) cPos = colours.length-1; 
+					console.log(cPos);
+					console.log(colours.length);
+				}
+				if(e.keyIdentifier == "Right"){
+					console.log("Right");
+					cPos += 1; 
+					if(cPos >= colours.length) cPos = 0; 
+				}
+
+				colour = colours[cPos];
+				drawStamp();
 			}
+
+			var drawStamp = function(){
+				sc.fillStyle = "white";
+				sc.fillRect(0, 0, sCanvas.width, sCanvas.height);
+				sc.fillStyle = colour;
+
+				if(toggleFlower){
+					sc.fillRect( (sCanvas.width/2)-(bs/2), (sCanvas.height/2)-(bs/2), bs, bs);
+				}else{
+					sc.beginPath();
+					sc.arc( sCanvas.width/2, sCanvas.height/2, bs/2, 0, 2 * Math.PI );
+					sc.fill();
+					sc.closePath();
+				}
+			}
+
+			// background( getRandomColour() );
+			window.onkeydown = keyPress;
+			window.onclick = draw;
 
 			// window.onmousedown = whatever;
 			// window.onmouseup = whatever;
-			window.onclick = whatever;
+			
 
 
         </script>
