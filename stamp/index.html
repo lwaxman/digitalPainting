@@ -4,11 +4,14 @@
         <meta charset="utf-8">
         <title>~clicky?</title>
         <style> 
-	        *{ margin: 0; }
+	        *{ 
+	        	margin: 0; 
+	        	font-family: 'Monaco', 'Menlo', monospace;
+	        }
 	        canvas{ 
 	        	vertical-align: top;
 	        	background: white; 
-	        	transition: opacity 800ms;
+	        	transition: opacity 500ms;
 	        }
 	        #stamp{
 	        	position: fixed;
@@ -18,10 +21,17 @@
 	        	height: 100%;
 	        	background: white;
 	        	opacity: 0;
-	        	transition: opacity 800ms;
+	        	transition: opacity 600ms;
 	        }
-	        #stamp canvas{
-	        	border: 10px solid blue;
+	        #help{
+	        	position: fixed;
+	        	color: blue;
+	        	top: 100px;
+	        	left: 50px;
+	        	font-size: 14px;
+	        	text-shadow: 0px 0px 20px white;
+	        	pointer-events: none;
+	        	transition: opacity 800ms;
 	        }
         </style>
     </head>
@@ -29,21 +39,25 @@
     	<canvas id="main"></canvas>
     	<canvas id="stamp"></canvas>
     	<div id="help">
-    		<p>1 = toggle background view</p>
-    		<p>2 = toggle stamp editor</p>
-    		<p>3 = </p>
+    		<p>1 = view background</p>
+    		<p>2 = view stamp editor</p>
+    		<p>3 = toggle leaf/flower</p>
+    		<p>left/right = cycle colours</p>
     	</div>
         <script>
+        	// main canvas
         	var canvas = document.getElementById("main");
 			var c = canvas.getContext("2d");
 			canvas.width = window.innerWidth;
 			canvas.height = window.innerHeight;
 
+			// pattern canvas
 			var pCanvas = document.createElement("canvas");
 			var pc = pCanvas.getContext("2d");
 			pCanvas.width = canvas.width/5; 
 			pCanvas.height = canvas.height/5;
 
+			// stamp canvas
 			var sCanvas = document.getElementById("stamp");
 			var sc = sCanvas.getContext("2d");
 			sCanvas.width = canvas.width; 
@@ -56,9 +70,7 @@
 
 			var background = function(shade){
 				c.fillStyle = shade; 
-				c.globalAlpha = 0.8;
 				c.fillRect(0, 0, canvas.width, canvas.height);
-				c.globalAlpha = 1;
 			}
 
 			var getRandomColour = function(){
@@ -130,8 +142,20 @@
 				c.restore();
 			}
 
-			var flower = function(){
-				
+			var flower = function(colour, size){
+				var fCanvas = document.createElement("canvas");
+				var fc = fCanvas.getContext("2d");
+				fCanvas.width = bs; 
+				fCanvas.height = bs;
+
+				petalCount = Math.random()*(8-5)+5;
+				petalAngle = 360/petalCount;
+				for(i=0; i<petalCount; i++){
+					fc.save();
+					fc.translate(b2/2, bs/2);
+					fc.rotate( petalAngle*i );
+					fc.restore();
+				}
 			}
 
 			var box = function(colour, size){
@@ -157,7 +181,7 @@
 			}
 
 			var keyPress = function(e){
-				// console.log(e);
+				console.log(e);
 
 				// 1 : toggle background
 				if(e.keyIdentifier == "U+0031"){
@@ -216,6 +240,17 @@
 					console.log("Right");
 					cPos += 1; 
 					if(cPos >= colours.length) cPos = 0; 
+				}
+
+				// H : hide lexicon
+				if(e.keyIdentifier == "U+0048"){
+					toggleHelp=!toggleHelp; 
+
+				}
+
+				// C : clear canvas
+				if(e.keyIdentifier == "U+0043"){
+					c.clearRect(0, 0, canvas.width, canvas.height);
 				}
 
 				colour = colours[cPos];
