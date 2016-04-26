@@ -1,0 +1,74 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>~ecosystem?</title>
+        <style> 
+            body{ margin: 0; } 
+            #tools{
+                position: fixed;
+                top: 50px;
+                left: 50px;
+                width: 50px;
+                background: #eee;
+            }
+            #tools div{
+                position: fixed;
+                width: 40px;
+                height: 40px;
+                border-radius: 22px;
+                margin-bottom: 10px;
+                display: inline-block;
+                border: 2px solid black;   
+            }
+            #tools div:hover{
+                border: 2px dotted black;
+                cursor: pointer;
+            }
+            #tools div#blue{
+                background: #006FFF;
+                top: 50px;
+            }
+            #tools div#green{
+                background: #00DD98;
+                top: 100px;
+            }
+            #tools div#red{
+                background: #FF005E;
+                top: 150px;
+            }
+            #tools div#cyan{
+                background: #00FFE5;
+                top: 200px;
+            }
+            #tools div#magenta{
+                background: #FF00C1;
+                top: 250px;
+            }
+            #tools div#yellow{
+                background: #FFF300;
+                top: 300px;
+            }
+            #tools div.inactive{
+                display: none;
+            }
+        </style>
+    </head>
+    <body>
+        <canvas id="main"></canvas>
+        <div id="tools">
+            <div class="button" id="red"></div>
+            <div class="button" id="green"></div>
+            <div class="button" id="blue"></div>
+            <div class="button inactive" id="cyan"></div>
+            <div class="button inactive" id="magenta"></div>
+            <div class="button inactive" id="yellow"></div>
+
+        </div>
+        <script src="js/library.js"></script>
+        <script src="js/critterBase.js"></script>
+        <script src="js/critters.js"></script>
+        <script src="js/add.js"></script>
+        <script src="js/ecosystem.js"></script>
+    </body>
+</html>

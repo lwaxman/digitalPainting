@@ -26,15 +26,15 @@ var setup = function(){
 	ctx.save();
 	ctx.translate(canvas.width/2, canvas.height-100);
 	ctx.rotate((Math.random()*(-25-25)+25) * Math.PI/180);
-	// kalePlant.drawStem(500);
+
 	drawPlant(0, 0);
 	ctx.restore();
 
-	// for(var i=1; i<4; i++){	
-	// 	xPos = Math.random()*(canvas.width-offset - offset)+offset;
-	// 	yPos = i*piece;
-	// 	drawPlant(xPos, yPos+piece);
-	// }
+	for(var i=1; i<10; i++){	
+		xPos = Math.random()*(canvas.width-offset - offset)+offset;
+		yPos = i*piece;
+		drawPlant(xPos, yPos+piece);
+	}
 
 }; 
 

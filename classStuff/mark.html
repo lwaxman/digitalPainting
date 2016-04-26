@@ -1,0 +1,73 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>~mark</title>
+    </head>
+    <style>
+	    *{ margin: 0; }
+    </style>
+    <body>
+    	<canvas id="main"></canvas>
+        <script>
+		    var canvas = document.getElementById("main");
+        	var c = canvas.getContext("2d");
+        	canvas.width = window.innerWidth;
+        	canvas.height = window.innerHeight;
+
+        	var hue = 0; 
+
+        	// var myTimer; 
+        	// var startItUp = function(){
+	        // 	myTimer = window.setInterval(function(){
+	        // 		hue += 1;
+		       //  	if(hue>360) hue=0;
+		       //  	c.fillStyle = "hsla("+ hue +", 30%, 50%, 1.0)";
+		       //  	c.fillRect(0, 0, canvas.width, canvas.height);
+	        // 	}, 50);
+        	// }
+
+        	// var soShutItDown = function(){
+	        // 	clearInterval(myTimer);
+        	// }
+
+        	// startItUp();
+
+        	var px = 0;
+        	var py = 0;
+
+        	var shutUpAndDraw = false;
+
+        	window.onmousedown = function(e){
+        		shutUpAndDraw = true;
+        		px = e.x;
+				py = e.y;
+    			c.beginPath();
+    			c.moveTo(px, py);
+        		// console.log("mousing down");
+        	}
+        	window.onmousemove = function(e){
+        		if(shutUpAndDraw){
+					// console.log("mousing move: ", e.x, e.y);
+					c.lineTo(e.x, e.y);
+					c.fill();
+
+					px = e.x;
+					py = e.y;
+        		}
+
+        	}
+
+        	window.onmouseup = function(e){
+        		c.closePath();
+        		shutUpAndDraw = false;
+				// console.log("mousing up");
+        	}
+
+
+
+
+
+        </script>
+    </body>
+</html>

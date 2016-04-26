@@ -12,14 +12,17 @@ var setup = function(){
 	ctx.fill();
 	ctx.imageSmoothingEnabled = true;
 
-	var xPos = Math.random()*(canvas.width-canvas.width*0.6)+canvas.width*0.6;
-	var yPos = (Math.random()*canvas.height/2)+canvas.height/2 ;//Math.random()*(canvas.width-canvas.height)+canvas.height*0.6;
+	console.log("setup>>");
 
-	ctx.save();  
-	ctx.translate(xPos, yPos);
-	ctx.rotate((Math.random()*(-25-25)+25) * Math.PI/180);
-	plant.drawStem(200);
-	ctx.restore();
+	for(var i=0; i<5; i++){
+		var xPos = Math.random()*(canvas.width-canvas.width*0.6)+canvas.width*0.6;
+		var yPos = (Math.random()*canvas.height/2)+canvas.height/2 ;//Math.random()*(canvas.width-canvas.height)+canvas.height*0.6;
+		console.log(i, xPos, yPos);
+		ctx.save();  
+		ctx.translate(xPos, yPos);
+		ctx.rotate((Math.random()*(-25-25)+25) * Math.PI/180);
+		ctx.restore();
+	}
 }; 
 
 var plant = {

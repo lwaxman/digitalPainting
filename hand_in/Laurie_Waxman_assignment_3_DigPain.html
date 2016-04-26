@@ -1,0 +1,212 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>~mark</title>
+    </head>
+    <style>
+	    *{ 
+	    	margin: 0; 
+	    }
+	    div{
+	    	font-family: "monaco", "menlo", monospace;
+	    }
+	    .source{
+	    	position: fixed;
+	    	left:50px;
+	    	bottom: 50px;
+	    	background: white;
+	    	padding: 2px 5px;
+	    	font-size: 10px;
+
+	    }
+	    .controls{
+	    	position: absolute;
+	    	right: 30px;
+	    	top: 50px;
+	    	width: 110px;
+	    	font-size: 14px;
+
+	    }
+	    h3{
+	    	padding: 2px 5px;
+			background: white;
+			display: inline-block;
+	    }
+	    p{
+			cursor: pointer;
+			padding: 2px 5px;
+			background: white;
+			display: inline-block;
+	    }
+	    p:hover{
+	    	color: #00CE7D;
+	    }
+		.active{
+			color: red;
+		}
+		#main{
+			position: fixed;
+		}
+		.link{
+			font-size: 14px;
+			position: absolute;
+			bottom: 80px;
+			left:50px;
+			background: white;
+		}
+		.link a{
+			padding: 2px 5px;
+			color: red;
+		}
+		.link a:hover{
+			background: red;
+			color: white;
+		}
+    </style>
+    <body>
+    	<canvas id="main"></canvas>
+    	<div class="controls">
+    		<h3>brushes:</h3>
+			<p id="amsterdam">amsterdam</p>
+    		<p id="berlin">berlin</p>
+    		<p id="beijing">beijing</p>
+    		<p id="copenhagen">copenhagen</p>
+			<p id="delhi">delhi</p>
+    		<p id="houston">houston</p>
+			<p id="istanbul">istanbul</p>
+    		<p id="london">london</p>
+    		<p id="los-angeles">los angeles</p>
+    		<p id="moscow">moscow</p>
+			<p id="mumbai">mumbai</p>
+			<p id="munich">munich</p>
+    		<p id="newyork" class="active">new york</p>
+    		<p id="paris">paris</p>
+    		<p id="prague">prague</p>
+    		<p id="seoul">seoul</p>
+    		<p id="sydney">sydney</p>
+			<p id="tokyo">tokyo</p>
+			<p id="toronto">toronto</p>
+    		<p id="vancouver">vancouver</p>
+    		<p id="vienna">vienna</p>
+			<p id="warsaw">warsaw</p>
+    	</div>
+    	<div class="link"><a href="http://lauriewaxman.com/work/airquality/">more interesting version</a></div>
+    	<div class="source">air quality index data from <a href="http://aqicn.org/">aqicn.org</a></div>
+        <script>
+			var canvas = document.getElementById("main");
+			var c = canvas.getContext("2d");
+			canvas.width = window.innerWidth;
+			canvas.height = window.innerHeight;
+			var result = 10;
+			var cityName = "newyork";
+
+			var getAQI = function(cName){
+				(function(w,d,t,f){ 
+					w[f]=w[f]||function(c,k,n){
+						s=w[f],k=s['k']=(s['k']||(k?('&k='+k):''));
+						s['c']= c=(c instanceof Array)?c:[c];
+						s['n']=n=n||0;
+						L=d.createElement(t),e=d.getElementsByTagName(t)[0];
+						L.async=1;L.src='http://feed.aqicn.org/feed/'+(c[n].city)+'/'+(c[n].lang||'')+'/feed.v1.js?n='+n+k;
+						e.parentNode.insertBefore(L,e); 
+					}; 
+				})( window,document,'script','_aqiFeed' );  
+				_aqiFeed({ 
+					city:cName,
+					callback:function(aqi){ 
+						var contents = document.createElement("p"); 
+						contents.innerHTML = aqi.aqi;
+						var span = contents.getElementsByTagName("span");
+						result = Math.round(span[0].innerHTML);
+						console.log(cName, result);
+					} 
+				});
+			}
+
+			getAQI(cityName);
+
+			var px = 0;
+			var py = 0;
+			var isDrawing = false;
+			c.strokeStyle = "blue";
+
+			// map from: 
+			// http://stackoverflow.com/questions/10756313/javascript-jquery-map-a-range-of-numbers-to-another-range-of-numbers
+			var map = function(num, minIN, maxIN, minOUT, maxOUT) {
+				return (num - minIN) * (maxOUT - minOUT) / (maxIN - minIN) + minOUT;
+			}
+
+			var random = function(min, max){
+				return rand = Math.round( Math.random()*(max-min)+min );
+			}
+
+			var getLength = function(x1, y1, x2, y2){
+					var a2 = (x2-x1)*(x2-x1);
+					var b2 = (y2-y1)*(y2-y1);
+					return Math.sqrt( a2 + b2);
+			}
+
+			var getAngle = function(x1, y1, x2, y2){
+				return Math.atan2( x2-x1, y2-y1 );
+			}
+
+			window.onmousedown = function(e){
+				isDrawing = true;
+				px = e.x;
+				py = e.y;
+			}
+
+			for(var i=0; i<document.getElementsByTagName("p").length; i++){
+				document.getElementsByTagName("p")[i].onclick = function(){
+					for(var i=0; i<document.getElementsByTagName("p").length; i++){
+						document.getElementsByTagName("p")[i].classList.remove("active")
+					}
+					getAQI(this.id);
+					this.className = "active";
+				}
+			}
+
+			window.onmousemove = function(e){
+				if(isDrawing){
+					var cx = e.clientX; 
+					var cy = e.clientY; 
+					var d = getLength(px, py, cx, cy);
+					var a = getAngle(px, py, cx, cy);
+					var f = Math.round(map(result, 0, 200, 255, 0));
+					var pCount = map(result, 0, 200, 2, 50);
+					var offset = map(result, 0, 200, 20, 200);
+					c.fillStyle = "rgba("+f+","+f+","+f+",0.1)";
+					for (var i = 0; i < d; i+=5) {
+						x = px + (Math.sin(a) * i) - 5;
+						y = py + (Math.cos(a) * i) - 5;
+
+						for(var j=0; j<pCount; j++){
+							var xPos = 0; 
+							var yPos = 0;
+							c.save();
+							c.translate(x, y);
+							c.rotate( random(0, 360) * Math.PI/180);
+							c.beginPath();
+							c.arc(0, random(10, offset), 10, 0, Math.PI*2);
+							c.closePath();
+							c.fill();
+							c.restore();
+						}
+					}
+					px = cx; 
+					py = cy; 
+				}
+			}
+
+			window.onmouseup = function(e){
+				isDrawing = false;
+				var dataURL = canvas.toDataURL();
+				// console.log(dataURL);
+			}
+
+
+
+        </script>
+    </body>
+</html>

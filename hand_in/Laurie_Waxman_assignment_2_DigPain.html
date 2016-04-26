@@ -299,12 +299,7 @@
 			var keyPress = function(e){
 				// console.log(e);
 
-				// 2 - 1 - 2 >> draw when you shouldn't
-				// 1 - 2 - 1 >> draw when you shouldn't
-
-
 				// 1 : toggle background preview
-				// hideCanvas = false;
 				if(e.keyIdentifier == "U+0031"){
 					hideCanvas=!hideCanvas;
 					if(hideCanvas){
@@ -319,7 +314,6 @@
 				}
 
 				// 2 : toggle stamp preview
-				// hideControls = true;
 				if(e.keyIdentifier == "U+0032"){
 					hideControls=!hideControls;
 					if(hideControls){

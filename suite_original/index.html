@@ -1,0 +1,45 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>~ecosystem?</title>
+        <style> 
+            body{ margin: 0; } 
+            #tools{
+                position: fixed;
+                top: 50px;
+                left: 50px;
+                width: 50px;
+            }
+            #tools div{
+                width: 30px;
+                height: 30px;
+                margin-bottom: 10px;
+                display: inline-block;
+            }
+            #tools div#blue{
+                background: blue;
+            }
+            #tools div#green{
+                background: green;
+            }
+            #tools div#red{
+                background: red;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="tools">
+            <div id="red"></div>
+            <div id="green"></div>
+            <div id="blue"></div>
+        </div>
+        <script src="component.js"></script>
+        <script src="renderer.js"></script>
+        <script src="math.js"></script>
+        <script src="movements.js"></script>
+        <script src="creatures.js"></script>
+        <script src="app.js"></script>
+        <script src="ecosystem.js"></script>
+    </body>
+</html>
