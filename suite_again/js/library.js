@@ -19,6 +19,42 @@ c.lineCap = "round";
 c.lineJoin = "round";
 c.lineWidth = 2;
 
+
+/******************************************************************* THIS PROJECT */
+
+var getStroke = function(colour){
+	var col = colour.split(",");
+	var r = parseFloat( col[0].split("(")[1].trim() );
+	var g = parseFloat( col[1].trim() );
+	var b = parseFloat( col[2].split(")")[0].trim() );
+
+	return "rgb("+(r+30)+","+(g+30)+","+(b+30)+")";
+};
+
+var mixColours = function(colour1, colour2){
+
+	var col1 = colour1.split(",");
+	var r1 = parseFloat( col1[0].split("(")[1].trim() );
+	var g1 = parseFloat( col1[1].trim() );
+	var b1 = parseFloat( col1[2].split(")")[0].trim() );
+
+
+	var col2 = colour2.split(",");
+	var r2 = parseFloat( col2[0].split("(")[1].trim() );
+	var g2 = parseFloat( col2[1].trim() );
+	var b2 = parseFloat( col2[2].split(")")[0].trim() );
+
+	var r = (r1+r2)/2; 
+	var g = (g1+g2)/2; 
+	var b = (b1+b2)/2; 
+
+	return "rgb("+r+","+g+","+b+")";
+};
+
+
+
+
+
 /*************************************************************************** MOUSE */
 
 var mouseX = -200; //w+200;
