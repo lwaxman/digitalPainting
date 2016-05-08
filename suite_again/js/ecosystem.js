@@ -10,7 +10,6 @@ window.onmousedown = function(event){
 	event.target.classList.forEach(function(cl){
 		if(cl.indexOf("button")>=0){
 			type = event.target.id;
-			colour = event.target.style.background;
 		}else{
 			type = null;
 		}
@@ -26,7 +25,7 @@ window.onmousemove = function(){
 	}
 };
 window.onmouseup = function(){
-	if(type!==null){ add(type, colour, ecosystem); }
+	if(type!==null){ add(type, ecosystem); }
 	mdown = false;
 	mtime = 0; 
 	type = null;

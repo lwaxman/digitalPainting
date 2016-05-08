@@ -23,8 +23,8 @@ RedCritter.prototype.update = function(){
 };
 
 RedCritter.prototype.draw = function(){
-	fill("#FF005E");
-	stroke("#FF6670");
+	fill("#FF0A00");
+	stroke("#C0002E");
 	ellipse(this.x-(this.w/2), this.y-(this.w/2), this.w, this.h, 0, 360);
 	ellipse(this.x+(this.w/2), this.y-(this.w/2), this.w, this.h, 0, 360);
 	ellipse(this.x-(this.w/2), this.y+(this.w/2), this.w, this.h, 0, 360);

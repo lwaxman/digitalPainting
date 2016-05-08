@@ -19,7 +19,6 @@ c.lineCap = "round";
 c.lineJoin = "round";
 c.lineWidth = 2;
 
-
 /******************************************************************* THIS PROJECT */
 
 var getStroke = function(colour){

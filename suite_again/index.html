@@ -17,24 +17,27 @@
                 width: 40px;
                 height: 40px;
                 border-radius: 22px;
-                margin-bottom: DB0B2410px;
+                margin-bottom: 10px;
                 display: inline-block;
                 border: 2px solid black;   
             }
             #tools div:hover{
-                border: 2px dotted black;
+                /*border: 2px dotted black;*/
                 cursor: pointer;
             }
-            #tools div#blue{
-                background: #006FFF;
+            #tools div#forest{
+                background: #38A85B;
+                 /*border: 2px solid black;   */
                 top: 50px;
             }
             #tools div#green{
                 background: #00DD98;
+                 /*border: 2px solid black;   */
                 top: 100px;
             }
-            #tools div#red{
-                background: #E71900;
+            #tools div#lime{
+                background: #BEE81C;
+                 /*border: 2px solid black;   */
                 top: 150px;
             }
         </style>
@@ -42,9 +45,9 @@
     <body>
         <canvas id="main"></canvas>
         <div id="tools">
-            <div class="button" style="background:#E71900" id="red"></div>
-            <div class="button" style="background:#00DD98" id="green"></div>
-            <div class="button" style="background:#006FFF" id="blue"></div>
+            <div class="button" style="background:#BEE81C; border-color:#000FFF" id="lime"></div>
+            <div class="button" style="background:#00DD98; border-color:#000FFF" id="green"></div>
+            <div class="button" style="background:#38A85B; border-color:#000FFF" id="forest"></div>
         </div>
         <script src="js/library.js"></script>
         <script src="js/critterBase.js"></script>

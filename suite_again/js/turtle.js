@@ -4,6 +4,7 @@ var makeTurtle = function(x, y, step){
 		y: y, 
 		direction: -90,
 		step: step, 
+		bank: [],
 		forward: function(steps){
 			this.x += Math.cos( degrees(this.direction) )*(this.step*steps);
 			this.y += Math.sin( degrees(this.direction) )*(this.step*steps);
@@ -15,33 +16,35 @@ var makeTurtle = function(x, y, step){
 		turnRight: function(deg){
 			this.direction += deg;
 		},
-		turnLeft: function(){
+		turnLeft: function(deg){
 			this.direction -= deg;
 		}
+
+		document.getElementById("blah")
 	};
 };
 
-// fill("cyan");
-// var turtle = makeTurtle(width/2, height/2, 10);
-// ellipse(turtle.x, turtle.y, 10, 10, 0, 360);
-
-// for(var rep=0; rep<5; rep++){
-// 	turtle.step = 10; 
-// 	for(var count=0; count<5; count++){
-// 		turtle.forward(10);
-// 		turtle.turnRight(50);
-// 		ellipse(turtle.x, turtle.y, 10, 10, 0, 360);
-// 		turtle.step = turtle.step*0.8;
-// 	}
-// 	turtle.direction += 150; 
-// }
+/*
+- commands in array
+- panable
+- "the drawing is the steps, not the picture"
+- >> save the base info, not every x/y co-ord.
+- turtle continues by making up negative x/y from with remains
+*/
 
 
-// var newX = this.x + Math.cos(this.direction) * step;
-// var newY = this.y + Math.sin(this.direction) * step;
+//var commands = [
+//];
 
-// turtle.pos
 
-// turtle.right(90);
-// turtle.step = 10;
-// turtle.forward();
+//commands.push(function() {
+//	forward(1);
+//});
+
+//
+
+
+
+//forward(10);
+// right(90);
+// forward(1);

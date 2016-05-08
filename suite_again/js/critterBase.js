@@ -1,58 +1,52 @@
 // component.js
-function Critter(x, y, w, h, colour){
+function Critter(x, y, w, h, fillColour, strokeColour, brain){
 	console.log("new!", x, y, w, h, colour);
 	this.x = x;
 	this.y = y;
 	this.w = w; 
 	this.h = h; 
+	this.direction = -90; 
 	this.steps = 0; 
 	this.step = random(2,20);
 	this.hover = false;
-	this.fill = colour;
-	this.stroke = getStroke(colour);
-	// this.brain = circle_brain();
+	this.fill = fillColour;
+	this.stroke = strokeColour;
+	this.brain = brain;
 }
 
-// var circle_brain = function () {
-// 	var t = make_turtle();
-// 	t.pos = [x, y];
+var wreath = function () {
+	var t = makeTurtle(this.x, this.y, this.step);
+	t.direction = this.direction;
 
-// 	return {
-// 		update: function () {
-// 			t.forward(1);
-// 			t.right(1);
-// 		}
-// 	};
-// };
+	var count;
+	for(count=0; count<10; count++){
+		t.forward(10);
+		t.turnRight(72);
+		stroke(this.stroke);
+		line(this.x, this.y, t.x, t.y);
+		t.step = t.step*0.8;
+		this.x = t.x; 
+		this.y = t.y; 
+	}
+	t.turnRight(72);
+	this.direction = t.direction; 
+};
 
+var drawPlant = function () {
+	
+};
 
 Critter.prototype.update = function(){
-	this.brain.update();
-
-	// this.steps++;
-	// // if(this.steps<=100){
-
-	// 	var choice = random(0,5);
-	// 	if(choice===0) {
-	// 		this.x+=this.step;
-	// 	}else if(choice===1) {
-	// 		this.x-=this.step;
-	// 	}else if(choice===2) {
-	// 		this.y-=this.step;
-	// 	}else{
-	// 		this.y+=this.step;
-	// 	}
-
-	// 	this.x = constrainX(this.x);
-	// 	this.y = constrainY(this.y);
-	// }
+	this.steps++;
+	if(this.steps<=5){
+		this.brain();
+	}
 };
 
 Critter.prototype.draw = function(){
-	// console.log("drawing");
-	fill(this.fill);
+	fill("#F54D31");
 	stroke(this.stroke);
-	ellipse(this.x, this.y, this.w, this.h, 0, 360);
+	ellipse(this.x, this.y, 30, 30, 0, 360);
 };
 
 Critter.prototype.checkCollision = function(){
