@@ -1,6 +1,13 @@
 var ecosystem = [];
 var buttonSize = 22; 
 
+var pCanvas = document.createElement("canvas");
+var pc = pCanvas.getContext("2d");
+pCanvas.setAttribute("id", "minicanvas");
+pCanvas.width = canvas.width/5; 
+pCanvas.height = canvas.height/5;
+document.body.appendChild(pCanvas);
+
 var mMove = false; 
 var mDown = false;
 var mtime = 0; 
@@ -37,11 +44,21 @@ window.onmouseup = function(){
 	type = null;
 };
 
+var showBG = false;
 
 document.onkeypress = function(e) {
 	console.log(e.keyCode);
     if(e.keyCode==67||e.keyCode==99){
     	ecosystem = [];
+    }else if(e.keyCode==49){
+    	showBG =! showBG; 
+    	if(showBG){
+    		var dataURL = pCanvas.toDataURL();
+    		document.body.style.backgroundImage = "url("+dataURL+")";
+	    	document.getElementById("main").style.opacity = 0;
+    	}else{
+    		document.getElementById("main").style.opacity = 1;
+    	}
     }
 };
 
@@ -51,10 +68,11 @@ var draw = function(){
 		return obj1.y - obj2.y;
 	});
 	clear();
-	// background("black");
+	pc.clearRect(0, 0, canvas.width/5, canvas.height/5);
 	ecosystem.forEach(function(plant) { 
 		plant.draw();
 	});
+	pc.drawImage(canvas, 0, 0, canvas.width/5, canvas.height/5);
 	window.requestAnimationFrame(draw); 
 };
 window.requestAnimationFrame(draw);

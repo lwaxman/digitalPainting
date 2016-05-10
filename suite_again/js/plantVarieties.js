@@ -37,47 +37,108 @@ var spindleBranch = function(t, length) {
 	t.popState();
 };
 
-/////////////////////////////////////////////////////////////////////////// FERN
+/////////////////////////////////////////////////////////////////////////// shrub
 
-// var newPlant = new Plant( width/2, height/2, "red", "#3D7556", fern);
+// var newPlant = new Plant( width/2, height/2, "red", "#3D7556", shrub);
 // newPlant.brain();
 
-var fern = function(){ 
-	console.log("fern");
+var shrub = function(){ 
+	console.log("shrub");
 	stroke(this.stroke);
 
 	this.turtle.penUp();
 	this.turtle.moveTo(this.x, this.y);
 	this.turtle.penDown();
 
-	this.turtle.rotate(-90);
+	this.turtle.rotate(-145);
 	
-	this.turtle.pushState();
-	this.turtle.rotate(random(-30,30));
-	fernBranch(this.turtle, 300);
-	// this.turtle.popState();
-// 
+	var length = random(100,300);
+	shrubBranch(this.turtle, length);
+
 };
 
-var fernBranch = function(t, length) {
-	if(length < 20){ return; }
-	t.rotate(random(-10,10));
-	t.moveForward(length);
-	t.penUp();
-	t.moveBackward(length*0.6);
+var shrubBranch = function(t, length) {
+	console.log(length);
+	// t.rotate(random(-10,10));
+	var branches = random(10,20);
 	t.penDown();
-	// var branches = random(2,5);
-	// for(var b=0; b<2; b++){
-		// console.log("b", b);
+	stroke(this.stroke);
+	var stemLength = length/branches; 
+	var b = 0;
+	var angle; 
+	for(b=0; b<branches; b++){
+	 	angle = 60/branches;
+	 	stemLength+=(length/branches);
 		t.pushState();
-		t.rotate(random(-60,60));
-		fernBranch(t, length * 0.5);
+		t.rotate(b*angle);
+		t.moveForward(stemLength);
+		t.moveBackward(stemLength);
 		t.popState();
-	// }
+	}
+	for(b=branches; b>=0; b--){
+		console.log(b);
+	 	angle = 60/branches;
+	 	stemLength=length-((length/branches)*b);
+		t.pushState();
+		t.rotate(60+b*angle);
+		t.moveForward(stemLength);
+		t.moveBackward(stemLength);
+		t.popState();
+	}
 };
 
 
-/////////////////////////////////////////////////////////////////////////// DILL
+/////////////////////////////////////////////////////////////////////////// FLOWER
+var flower = function(){ 
+	console.log("flower");
+	stroke(this.stroke);
+
+	this.turtle.penUp();
+	this.turtle.moveTo(this.x, this.y);
+	this.turtle.penDown();
+
+	this.turtle.rotate(-145);
+
+	var length = random(80,200);
+	flowerPetal(this.turtle, length);
+};
+
+var flowerPetal = function(t, length) {
+	var branches = random(10,20);
+	stroke(this.stroke);
+	var stemLength = length/branches; 
+	var b = 0;
+	var angle;
+
+	t.penDown();
+	for(var i=0; i<5; i++){
+		stemLength = length/branches; 	
+		t.pushState();
+		t.rotate(72*i);
+		for(b=0; b<branches; b++){
+		 	angle = 72/branches;
+		 	stemLength+=(length/branches);
+			t.pushState();
+			t.rotate(b*angle);
+			t.moveForward(stemLength);
+			t.moveBackward(stemLength);
+			t.popState();
+		}
+		for(b=branches; b>=0; b--){
+			console.log(b);
+		 	angle = 72/branches;
+		 	stemLength=length-((length/branches)*b);
+			t.pushState();
+			t.rotate(72+b*angle);
+			t.moveForward(stemLength);
+			t.moveBackward(stemLength);
+			t.popState();
+		}
+		t.popState();
+	}
+
+
+};
 
 
 /////////////////////////////////////////////////////////////////////////// THISTLE

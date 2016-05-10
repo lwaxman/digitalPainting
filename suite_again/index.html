@@ -5,10 +5,22 @@
         <title>~ecosystem?</title>
         <style> 
             body{ margin: 0; } 
+            #main{
+                opacity: 1;
+                background: white;
+                transition: opacity 500ms;
+            }
+            #minicanvas{
+                opacity: 0;
+                display: none;
+                position: fixed;
+                bottom: 50px;
+                left: 50px;
+                border: 2px solid blue;
+            }
             #tools{
                 position: absolute;
                 display: inline-block;
-                /*position: fixed;*/
                 top: 50px;
                 left: 50px;
                 width: 120px;
@@ -26,15 +38,25 @@
             #tools div:hover{
                 cursor: pointer;
             }
-            #tools div#fern{
+            #tools div#shrub{
                 background: #00DD98;
                 left: 50px;
-                top: 50px;
+                bottom: 50px;
+            }
+            #tools div#flower{
+                background: #F76888;
+                left: 60%;
+                bottom: 50px;
+            }
+            #tools div#shrub{
+                background: #00DD98;
+                left: 50%;
+                bottom: 50px;
             }
             #tools div#sprindle{
                 background: #BEE81C;
-                left: 50%;
-                top: 50%;
+                left: 40%;
+                bottom: 50px;
             }
 
             #zooms{
@@ -76,13 +98,9 @@
         <canvas id="main"></canvas>
         <div id="tools">
             <div class="button" id="sprindle"></div>
-            <div class="button" id="fern"></div>
-            <!-- <div class="button" style="background:#38A85B; border-color:#000FFF" id="forest"></div> -->
+            <div class="button" id="shrub"></div>
+            <div class="button" id="flower"></div>
         </div>
-<!--         <div id="zooms">
-            <div class="zoom" id="zoomIn">+</div>
-            <div class="zoom" id="zoomOut">-</div>
-        </div> -->
         <script src="js/library.js"></script>
         <script src="js/turtle.js"></script>
         <script src="js/plantBase.js"></script>

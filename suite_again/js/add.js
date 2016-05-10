@@ -11,14 +11,14 @@ var add = function(type, ecosystem){
 		brain = spindle;
 		fillColour = "#FF4D74";
 		strokeColour = "#8CAA4B";
-	}else if(type==="thistle"){
-		brain = thistle;
+	}else if(type==="shrub"){
+		brain = shrub;
 		fillColour = "#39BE92"; 
 		strokeColour = "#319E59";
-	}else if(type==="fern"){
-		brain = fern;
-		fillColour = "#00BF4D"; 
-		strokeColour = "#00A23F";
+	}else if(type==="flower"){
+		brain = flower;
+		fillColour = "#F76888"; 
+		strokeColour = "#F76888";
 	}
 	var newPlant = new Plant( left, top, fillColour, strokeColour, brain);
 	newPlant.brain();

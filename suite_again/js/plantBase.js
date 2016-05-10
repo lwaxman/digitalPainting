@@ -74,26 +74,78 @@ Plant.prototype.repeat = function(c){
 			case 1:
 				xx1 = -(width-l.x1);
 				xx2 = -(width-l.x2);
+				stroke(this.bgStroke);
+				line(xx1, yy1, xx2, yy2);
+				stroke(this.stroke);
+				line(xx1, yy1, xx2, yy2);
 				break;
 			case 2:
-				xx1 = (x+l.x1);
-				xx2 = (x+l.x2);
+				xx1 = (width+l.x1);
+				xx2 = (width+l.x2);
+				stroke(this.bgStroke);
+				line(xx1, yy1, xx2, yy2);
+				stroke(this.stroke);
+				line(xx1, yy1, xx2, yy2);
 				break;
 			case 3:
-				xx1 = (x+l.x1);
-				xx2 = (x+l.x2);
+				//bottom left
 				yy1 = height+l.y1;
 				yy2 = height+l.y2;
+				stroke(this.bgStroke);
+				line(xx1, yy1, xx2, yy2);
+				stroke(this.stroke);
+				line(xx1, yy1, xx2, yy2);
+				//bottom right
+				xx1 = (width+l.x1);
+				xx2 = (width+l.x2);
+				stroke(this.bgStroke);
+				line(xx1, yy1, xx2, yy2);
+				stroke(this.stroke);
+				line(xx1, yy1, xx2, yy2);
+				//top right
+				xx1 = (width+l.x1);
+				xx2 = (width+l.x2);
+				yy1 = l.y1;
+				yy2 = l.y2;
+				stroke(this.bgStroke);
+				line(xx1, yy1, xx2, yy2);
+				stroke(this.stroke);
+				line(xx1, yy1, xx2, yy2);
 				break;
 			case 4:
+				//bottom left
 				xx1 = -(width-l.x1);
 				xx2 = -(width-l.x2);
 				yy1 = height+l.y1;
 				yy2 = height+l.y2;
+				stroke(this.bgStroke);
+				line(xx1, yy1, xx2, yy2);
+				stroke(this.stroke);
+				line(xx1, yy1, xx2, yy2);
+				//bottom right
+				xx1 = l.x1;
+				xx2 = l.x2;
+				stroke(this.bgStroke);
+				line(xx1, yy1, xx2, yy2);
+				stroke(this.stroke);
+				line(xx1, yy1, xx2, yy2);
+				//top left
+				xx1 = -(width-l.x1);
+				xx2 = -(width-l.x2);
+				yy1 = l.y1;
+				yy2 = l.y2;
+				stroke(this.bgStroke);
+				line(xx1, yy1, xx2, yy2);
+				stroke(this.stroke);
+				line(xx1, yy1, xx2, yy2);
 				break;
 			case 5:
 				yy1 = height+l.y1;
 				yy2 = height+l.y2;
+				stroke(this.bgStroke);
+				line(xx1, yy1, xx2, yy2);
+				stroke(this.stroke);
+				line(xx1, yy1, xx2, yy2);
 				break;
 			default:
 				xx1 = l.x1;
@@ -102,9 +154,10 @@ Plant.prototype.repeat = function(c){
 				yy2 = l.y2;
 				break;
 		}
-		stroke(this.bgStroke);
-		line(xx1, yy1, xx2, yy2);
-		stroke(this.stroke);
-		line(xx1, yy1, xx2, yy2);
+
 	}
 };
+
+
+
+
