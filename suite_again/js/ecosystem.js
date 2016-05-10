@@ -22,15 +22,9 @@ window.onmousedown = function(event){
 window.onmousemove = function(){
 	mMove = true; 
 	if(mDown){
-		// if( document.body.classList.contains('button') ){
-			var element = document.getElementById(type);
-			element.style.top = (mouseY-buttonSize)+"px";
-			element.style.left = (mouseX-buttonSize)+"px";
-		// }
-		// else{
-		// 	c.style.top = (mouseY-buttonSize)+"px";
-
-		// }
+		var element = document.getElementById(type);
+		element.style.top = (mouseY-buttonSize)+"px";
+		element.style.left = (mouseX-buttonSize)+"px";
 	}
 };
 window.onmouseup = function(){
@@ -44,16 +38,23 @@ window.onmouseup = function(){
 };
 
 
+document.onkeypress = function(e) {
+	console.log(e.keyCode);
+    if(e.keyCode==67||e.keyCode==99){
+    	ecosystem = [];
+    }
+};
 
 
-
-
-// var draw = function(){
-// 	ecosystem.forEach(function(critter) { 
-// 		// critter.update(); 
-// 		// critter.checkCollision();
-// 		// critter.draw();
-// 	});
-// 	window.requestAnimationFrame(draw); 
-// };
-// window.requestAnimationFrame(draw);
+var draw = function(){
+	ecosystem.sort(function(obj1, obj2){
+		return obj1.y - obj2.y;
+	});
+	clear();
+	// background("black");
+	ecosystem.forEach(function(plant) { 
+		plant.draw();
+	});
+	window.requestAnimationFrame(draw); 
+};
+window.requestAnimationFrame(draw);

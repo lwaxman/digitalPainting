@@ -9,9 +9,17 @@ function Turtle(x, y){
     this.direction = 0;
     this.penState = true;
     this.bank = [];
+    this.history = [];
 }
 
 Turtle.prototype.moveTo = function(newX, newY) {
+    this.history.push({
+        x1: this.x, 
+        y1: this.y, 
+        x2: newX, 
+        y2: newY
+        //type: something
+    });
     if(this.penState){
         line(this.x, this.y, newX, newY);
     }
@@ -61,6 +69,10 @@ Turtle.prototype.popState = function() {
         this.y = state.y;
         this.direction = state.direction;
         this.penState = state.penState;
+        // this.bank.push( state );
     }else{ return; }
 };
+
+
+
 

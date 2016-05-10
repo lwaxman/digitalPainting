@@ -21,34 +21,42 @@ c.lineWidth = 2;
 
 /******************************************************************* THIS PROJECT */
 
-var getStroke = function(colour){
-	var col = colour.split(",");
-	var r = parseFloat( col[0].split("(")[1].trim() );
-	var g = parseFloat( col[1].trim() );
-	var b = parseFloat( col[2].split(")")[0].trim() );
-
-	return "rgb("+(r+30)+","+(g+30)+","+(b+30)+")";
+var darken = function(colour){
+	var col = hexToRGB(colour);
+	return "rgb("+(col.r-50)+","+(col.g-50)+","+(col.b-50)+")";
 };
 
-var mixColours = function(colour1, colour2){
-
-	var col1 = colour1.split(",");
-	var r1 = parseFloat( col1[0].split("(")[1].trim() );
-	var g1 = parseFloat( col1[1].trim() );
-	var b1 = parseFloat( col1[2].split(")")[0].trim() );
-
-
-	var col2 = colour2.split(",");
-	var r2 = parseFloat( col2[0].split("(")[1].trim() );
-	var g2 = parseFloat( col2[1].trim() );
-	var b2 = parseFloat( col2[2].split(")")[0].trim() );
-
-	var r = (r1+r2)/2; 
-	var g = (g1+g2)/2; 
-	var b = (b1+b2)/2; 
-
-	return "rgb("+r+","+g+","+b+")";
+// hexToRGB from: 
+// http://stackoverflow.com/questions/5623838/rgb-to-hex-and-hex-to-rgb
+var hexToRGB = function(hex) {
+    var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return result ? {
+        r: parseInt(result[1], 16),
+        g: parseInt(result[2], 16),
+        b: parseInt(result[3], 16)
+    } : null;
 };
+
+
+// var mixColours = function(colour1, colour2){
+
+// 	var col1 = colour1.split(",");
+// 	var r1 = parseFloat( col1[0].split("(")[1].trim() );
+// 	var g1 = parseFloat( col1[1].trim() );
+// 	var b1 = parseFloat( col1[2].split(")")[0].trim() );
+
+
+// 	var col2 = colour2.split(",");
+// 	var r2 = parseFloat( col2[0].split("(")[1].trim() );
+// 	var g2 = parseFloat( col2[1].trim() );
+// 	var b2 = parseFloat( col2[2].split(")")[0].trim() );
+
+// 	var r = (r1+r2)/2; 
+// 	var g = (g1+g2)/2; 
+// 	var b = (b1+b2)/2; 
+
+// 	return "rgb("+r+","+g+","+b+")";
+// };
 
 var push = function(){
 	c.save();
@@ -156,6 +164,11 @@ var background = function(colour){
 };
 
 
+var clear = function(){ 
+	c.clearRect(0, 0, canvas.width, canvas.height); 
+};
+
+
 var pLine = function(x1, y1, x2, y2){
 	var offset = 2; 
 	c.lineTo(x1, y1);
@@ -177,12 +190,24 @@ var line = function(x1, y1, x2, y2){
 	if(strokeShape){ c.stroke(); }
 };
 
+// var rect = function(x, y, w, h){
+// 	c.beginPath();
+// 	pLine(x-(w/2), y-(h/2), x+(w/2), y-(h/2));
+// 	pLine(x+(w/2), y-(h/2), x+(w/2), y+(h/2));
+// 	pLine(x+(w/2), y+(h/2), x-(w/2), y+(h/2));
+// 	pLine(x-(w/2), y+(h/2), x-(w/2), y-(h/2));
+// 	c.closePath();
+// 	if(fillShape){ c.fill(); }
+// 	if(strokeShape){ c.stroke(); }
+// };
+
 var rect = function(x, y, w, h){
 	c.beginPath();
-	pLine(x-(w/2), y-(h/2), x+(w/2), y-(h/2));
-	pLine(x+(w/2), y-(h/2), x+(w/2), y+(h/2));
-	pLine(x+(w/2), y+(h/2), x-(w/2), y+(h/2));
-	pLine(x-(w/2), y+(h/2), x-(w/2), y-(h/2));
+	pLine(x, y, x+w, y);
+	pLine(x+w, y, x+w, y+h);
+	pLine(x+w, y+h, x, y+h);
+	pLine(x, y+h, x, y);
+	
 	c.closePath();
 	if(fillShape){ c.fill(); }
 	if(strokeShape){ c.stroke(); }

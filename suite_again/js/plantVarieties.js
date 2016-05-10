@@ -24,6 +24,7 @@ var spindle = function(){
 
 var spindleBranch = function(t, length) {
 	if(length < 60){ return; }
+	t.pushState();
 	t.rotate(random(-10,10));
 	t.moveForward(length);
 	var branches = random(2,5);
@@ -33,6 +34,7 @@ var spindleBranch = function(t, length) {
 		spindleBranch(t, length * 0.85);
 		t.popState();
 	}
+	t.popState();
 };
 
 /////////////////////////////////////////////////////////////////////////// FERN
