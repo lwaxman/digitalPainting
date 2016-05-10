@@ -50,10 +50,21 @@ var mixColours = function(colour1, colour2){
 	return "rgb("+r+","+g+","+b+")";
 };
 
+var push = function(){
+	c.save();
+};
 
+var pop = function(){
+	c.restore();
+};
 
+var rotate = function(d){
+	c.rotate( radians(d) );
+};
 
-
+var translate = function(x,y){
+	c.translate(x, y);
+};
 /*************************************************************************** MOUSE */
 
 var mouseX = -200; //w+200;
@@ -90,19 +101,19 @@ var constrainX = function(x){
 	if(x>width) x = 5; 
 	else if(x<0) x = width-5; 
 	return x;
-}
+};
 
 var constrainY = function(y){
 	if(y>window.innerHeight) y = 5; 
 	else if(y<0) y = window.innerHeight-5; 
 	return y;
-}
+};
 
 var map = function(num, minIN, maxIN, minOUT, maxOUT) {
   return (num - minIN) * (maxOUT - minOUT) / (maxIN - minIN) + minOUT;
 };
 
-var degrees = function(d){
+var radians = function(d){
 	return d * Math.PI/180;
 };
 
@@ -200,14 +211,14 @@ var pEllipse = function(x, y, w, h, s, e){
 	for(i=s; i<e; i+=inc){
 		if(w>h){
 		//stretch width
-			px = x + (r * Math.cos( degrees(i) )) + random(-offset, offset);
-			py = y + (r * Math.sin( degrees(i) )) + random(-offset, offset);
+			px = x + (r * Math.cos( radians(i) )) + random(-offset, offset);
+			py = y + (r * Math.sin( radians(i) )) + random(-offset, offset);
 			px = map(px, x+(r/2), x-(r/2), x+(w/4), x-(w/4)); //from circle to ellipse
 			c.lineTo(px, py);	
 		}else{
 		//stretch height
-			px = x + (r * Math.cos( degrees(i) )) + random(-offset, offset);
-			py = y + (r * Math.sin( degrees(i) )) + random(-offset, offset);
+			px = x + (r * Math.cos( radians(i) )) + random(-offset, offset);
+			py = y + (r * Math.sin( radians(i) )) + random(-offset, offset);
 			py = map(py, y+(r/2), y-(r/2), y+(h/4), y-(h/4)); //from circle to ellipse
 			c.lineTo(px, py);	
 		}
@@ -261,14 +272,14 @@ var arc =  function(x, y, w, h, s, e){
 	for(i=s; i<e; i+=inc){
 		if(w>h){
 		//stretch width
-			px = x + (r * Math.cos( degrees(i) )) + random(-offset, offset);
-			py = y + (r * Math.sin( degrees(i) )) + random(-offset, offset);
+			px = x + (r * Math.cos( radians(i) )) + random(-offset, offset);
+			py = y + (r * Math.sin( radians(i) )) + random(-offset, offset);
 			px = map(px, x+(r/2), x-(r/2), x+(w/4), x-(w/4)); //from circle to ellipse
 			c.lineTo(px, py);	
 		}else{
 		//stretch height
-			px = x + (r * Math.cos( degrees(i) )) + random(-offset, offset);
-			py = y + (r * Math.sin( degrees(i) )) + random(-offset, offset);
+			px = x + (r * Math.cos( radians(i) )) + random(-offset, offset);
+			py = y + (r * Math.sin( radians(i) )) + random(-offset, offset);
 			py = map(py, y+(r/2), y-(r/2), y+(h/4), y-(h/4)); //from circle to ellipse
 			c.lineTo(px, py);	
 		}

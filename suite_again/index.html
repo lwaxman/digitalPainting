@@ -6,54 +6,88 @@
         <style> 
             body{ margin: 0; } 
             #tools{
-                position: fixed;
+                position: absolute;
+                display: inline-block;
+                /*position: fixed;*/
                 top: 50px;
                 left: 50px;
-                width: 50px;
+                width: 120px;
                 background: #eee;
             }
             #tools div{
                 position: fixed;
+                display: inline-block;
                 width: 40px;
                 height: 40px;
                 border-radius: 22px;
                 margin-bottom: 10px;
-                display: inline-block;
                 border: 2px solid black;   
             }
             #tools div:hover{
-                /*border: 2px dotted black;*/
                 cursor: pointer;
             }
-            #tools div#forest{
-                background: #38A85B;
-                 /*border: 2px solid black;   */
+            #tools div#fern{
+                background: #00DD98;
+                left: 50px;
                 top: 50px;
             }
-            #tools div#green{
-                background: #00DD98;
-                 /*border: 2px solid black;   */
-                top: 100px;
-            }
-            #tools div#lime{
+            #tools div#sprindle{
                 background: #BEE81C;
-                 /*border: 2px solid black;   */
-                top: 150px;
+                left: 108px;
+                top: 50px;
             }
+
+            #zooms{
+                position: absolute;
+                display: inline-block;
+                top: 50px;
+                right: 50px;
+                width: 120px;
+                font-size: 50px;
+            }
+
+            #zooms div{
+                display: inline-block;
+                width: 40px;
+                height: 40px;
+                text-align: center;
+                line-height: 32px;
+                background: #eee;
+                border-radius: 22px; 
+                border: 2px solid black;   
+            }
+            #zooms div:hover{
+                background: black;
+                color: #eee;
+                border-color: #eee;
+                cursor: pointer;
+            }
+
+            #zoomIn{
+                color: blue;
+            }
+            #zoomOut{
+
+            }
+
         </style>
     </head>
     <body>
         <canvas id="main"></canvas>
         <div id="tools">
-            <div class="button" style="background:#BEE81C; border-color:#000FFF" id="lime"></div>
-            <div class="button" style="background:#00DD98; border-color:#000FFF" id="green"></div>
-            <div class="button" style="background:#38A85B; border-color:#000FFF" id="forest"></div>
+            <div class="button" id="sprindle"></div>
+            <div class="button" id="fern"></div>
+            <!-- <div class="button" style="background:#38A85B; border-color:#000FFF" id="forest"></div> -->
         </div>
-        <script src="js/library.js"></script>
-        <script src="js/critterBase.js"></script>
-        <script src="js/critters.js"></script>
-        <script src="js/add.js"></script>
-        <script src="js/turtle.js"></script>
-        <script src="js/ecosystem.js"></script>
+        <div id="zooms">
+            <div class="zoom" id="zoomIn">+</div>
+            <div class="zoom" id="zoomOut">-</div>
+        </div>
+        <script src="js_withFeeling/library.js"></script>
+        <script src="js_withFeeling/turtle.js"></script>
+        <script src="js_withFeeling/plantBase.js"></script>
+        <script src="js_withFeeling/plantVarieties.js"></script>
+        <script src="js_withFeeling/add.js"></script>
+        <script src="js_withFeeling/ecosystem.js"></script>
     </body>
 </html>
