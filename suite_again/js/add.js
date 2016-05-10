@@ -9,16 +9,16 @@ var add = function(type, ecosystem){
 	var brain; 
 	if(type==="sprindle"){
 		brain = spindle;
-		fillColour = "#FF4D74";
-		strokeColour = "#8CAA4B";
+		fillColour = "#A4D31B";
+		strokeColour = "#A4D31B";
 	}else if(type==="shrub"){
 		brain = shrub;
-		fillColour = "#39BE92"; 
+		fillColour = "#319E59"; 
 		strokeColour = "#319E59";
 	}else if(type==="flower"){
 		brain = flower;
-		fillColour = "#F76888"; 
-		strokeColour = "#F76888";
+		fillColour = "#7ED669"; 
+		strokeColour = "#7ED669";
 	}
 	var newPlant = new Plant( left, top, fillColour, strokeColour, brain);
 	newPlant.brain();

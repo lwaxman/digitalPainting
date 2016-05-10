@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="utf-8">
-        <title>~ecosystem?</title>
+        <title>~worse plants?</title>
         <style> 
             body{ margin: 0; } 
             #main{
@@ -33,23 +33,18 @@
                 height: 40px;
                 border-radius: 22px;
                 margin-bottom: 10px;
-                border: 2px solid black;   
+                border: 2px solid #eee;   
             }
             #tools div:hover{
                 cursor: pointer;
             }
-            #tools div#shrub{
-                background: #00DD98;
-                left: 50px;
-                bottom: 50px;
-            }
             #tools div#flower{
-                background: #F76888;
+                background: #7ED669;
                 left: 60%;
                 bottom: 50px;
             }
             #tools div#shrub{
-                background: #00DD98;
+                background: #39BE92;
                 left: 50%;
                 bottom: 50px;
             }
@@ -76,7 +71,7 @@
                 line-height: 32px;
                 background: #eee;
                 border-radius: 22px; 
-                border: 2px solid black;   
+                border: 2px solid #eee;   
             }
             #zooms div:hover{
                 background: black;
@@ -85,11 +80,43 @@
                 cursor: pointer;
             }
 
-            #zoomIn{
-                color: blue;
-            }
-            #zoomOut{
+            #controls{
+                position: fixed;
+                top: 50px;
+                display: inline-block;
+                width: 100%;
+                text-align: center;
 
+            }
+            #controls div,
+            #controls a{
+                padding: 5px 10px;
+                font-family: monospace;
+                background: #eee;
+                display: inline-block;
+            }
+            #controls a{
+                text-decoration: none;
+
+            }
+            #controls a:active,
+            #controls a:visited{
+                color: black;
+            }
+            #controls div:hover,
+            #controls a:hover{
+                background: #ccc;  
+                cursor: pointer; 
+            }
+
+            #pattern{
+                left: 40%;
+            }
+            #download{
+                left: 50%;
+            }
+            #clear{
+                left: 60%;
             }
 
         </style>
@@ -100,6 +127,11 @@
             <div class="button" id="sprindle"></div>
             <div class="button" id="shrub"></div>
             <div class="button" id="flower"></div>
+        </div>
+        <div id="controls">
+            <div id="pattern">preview/p</div>
+            <a id="download">download/d</a>
+            <div id="clear">clear/c</div>
         </div>
         <script src="js/library.js"></script>
         <script src="js/turtle.js"></script>

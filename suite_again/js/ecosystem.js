@@ -4,8 +4,8 @@ var buttonSize = 22;
 var pCanvas = document.createElement("canvas");
 var pc = pCanvas.getContext("2d");
 pCanvas.setAttribute("id", "minicanvas");
-pCanvas.width = canvas.width/5; 
-pCanvas.height = canvas.height/5;
+pCanvas.width = canvas.width/3; 
+pCanvas.height = canvas.height/3;
 document.body.appendChild(pCanvas);
 
 var mMove = false; 
@@ -50,17 +50,36 @@ document.onkeypress = function(e) {
 	console.log(e.keyCode);
     if(e.keyCode==67||e.keyCode==99){
     	ecosystem = [];
-    }else if(e.keyCode==49){
-    	showBG =! showBG; 
-    	if(showBG){
-    		var dataURL = pCanvas.toDataURL();
-    		document.body.style.backgroundImage = "url("+dataURL+")";
-	    	document.getElementById("main").style.opacity = 0;
-    	}else{
-    		document.getElementById("main").style.opacity = 1;
-    	}
+    }else if(e.keyCode==80||e.keyCode==112){
+    	document.getElementById("pattern").click();
+    }else if(e.keyCode==68||e.keyCode==100){
+		document.getElementById("download").click();
     }
 };
+
+document.getElementById("pattern").onclick = function(){
+	showBG =! showBG; 
+	if(showBG){
+		var dataURL = pCanvas.toDataURL();
+		document.body.style.backgroundImage = "url("+dataURL+")";
+    	document.getElementById("main").style.opacity = 0;
+    	document.getElementById("tools").style.opacity = 0;
+	}else{
+		document.getElementById("main").style.opacity = 1;
+		document.getElementById("tools").style.opacity = 1;
+	}
+};
+
+document.getElementById("download").onclick = function(){
+	download.href = canvas.toDataURL();
+	download.download = "pattern.png";
+};
+
+document.getElementById("clear").onclick = function(){
+	ecosystem = [];
+};
+
+
 
 
 var draw = function(){
@@ -68,11 +87,11 @@ var draw = function(){
 		return obj1.y - obj2.y;
 	});
 	clear();
-	pc.clearRect(0, 0, canvas.width/5, canvas.height/5);
+	pc.clearRect(0, 0, canvas.width/3, canvas.height/3);
 	ecosystem.forEach(function(plant) { 
 		plant.draw();
 	});
-	pc.drawImage(canvas, 0, 0, canvas.width/5, canvas.height/5);
+	pc.drawImage(canvas, 0, 0, canvas.width/3, canvas.height/3);
 	window.requestAnimationFrame(draw); 
 };
 window.requestAnimationFrame(draw);

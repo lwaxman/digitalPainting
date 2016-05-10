@@ -52,14 +52,12 @@ var shrub = function(){
 
 	this.turtle.rotate(-145);
 	
-	var length = random(100,300);
+	var length = random(180,300);
 	shrubBranch(this.turtle, length);
 
 };
 
 var shrubBranch = function(t, length) {
-	console.log(length);
-	// t.rotate(random(-10,10));
 	var branches = random(10,20);
 	t.penDown();
 	stroke(this.stroke);
@@ -97,7 +95,7 @@ var flower = function(){
 	this.turtle.moveTo(this.x, this.y);
 	this.turtle.penDown();
 
-	this.turtle.rotate(-145);
+	this.turtle.rotate(-230);
 
 	var length = random(80,200);
 	flowerPetal(this.turtle, length);
@@ -111,7 +109,7 @@ var flowerPetal = function(t, length) {
 	var angle;
 
 	t.penDown();
-	for(var i=0; i<5; i++){
+	for(var i=0; i<3; i++){
 		stemLength = length/branches; 	
 		t.pushState();
 		t.rotate(72*i);

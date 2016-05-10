@@ -10,7 +10,6 @@ function Plant(x, y, fillColour, strokeColour, brain){
 	this.fill = fillColour;
 	this.stroke = strokeColour;
 	this.bgStroke = darken(strokeColour);
-	// this.waveAngle = random(0, 2*Math.PI);
 	this.brain = brain; 
 	this.turtle = new Turtle(this.x, this.y, this.angle);
 }
@@ -154,7 +153,6 @@ Plant.prototype.repeat = function(c){
 				yy2 = l.y2;
 				break;
 		}
-
 	}
 };
 
